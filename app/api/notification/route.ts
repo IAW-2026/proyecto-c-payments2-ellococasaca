@@ -44,7 +44,6 @@ export async function POST(request: Request) {
         if (!ts || !hash) {
             return NextResponse.json({ error: 'Invalid x-signature format' }, { status: 400 });
         }
-
         // Obtain the secret key for the user/application from Mercadopago developers site
         // Ideally this should be an environment variable like process.env.MERCADOPAGO_WEBHOOK_SECRET
         const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET || 'your_secret_key_here';
@@ -62,7 +61,8 @@ export async function POST(request: Request) {
         if (sha === hash) {
             // HMAC verification passed
             console.log("HMAC verification passed");
-            // Process the notification...
+            // TODO: procesar notificacion
+            console.log(request)
             return NextResponse.json({ success: true });
         } else {
             // HMAC verification failed

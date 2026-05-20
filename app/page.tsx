@@ -1,4 +1,8 @@
+'use client'
+
 import Image from "next/image";
+import { useUser } from '@clerk/nextjs'
+
 
 export default function Home() {
   return (

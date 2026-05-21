@@ -67,6 +67,7 @@ export async function POST(request: Request) {
         } else {
             // HMAC verification failed
             console.error("HMAC verification failed");
+            console.log(request)
             return NextResponse.json({ error: 'Invalid signature' }, { status: 403 });
         }
     } catch (error) {

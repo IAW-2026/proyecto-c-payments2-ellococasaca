@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
             notification_url: "https://proyecto-c-payments2-ellococasaca-dye6q58q6.vercel.app/api/notification"
           }
   };
-
+  console.log(preferenceData)
   // 4. Enviamos los datos a MercadoPago para crear el intento de pago
   const preference = new Preference(client);
   const result = await preference.create(preferenceData);

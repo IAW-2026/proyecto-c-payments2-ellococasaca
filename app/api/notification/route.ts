@@ -61,13 +61,15 @@ export async function POST(request: Request) {
         if (sha === hash) {
             // HMAC verification passed
             console.log("HMAC verification passed");
+            const body = await request.json();
+            console.log("Webhook body:", body);
             // TODO: procesar notificacion
-            console.log(request)
             return NextResponse.json({ success: true });
         } else {
             // HMAC verification failed
             console.error("HMAC verification failed");
-            console.log(request)
+            const bodyText = await request.text();
+            console.log("Webhook body text:", bodyText);
             console.log("MANIFEST:", manifest);
             console.log("MP HASH:", hash);
             console.log("YOUR HASH:", sha);

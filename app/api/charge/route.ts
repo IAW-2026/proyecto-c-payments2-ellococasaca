@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
             auto_return: "approved", // Redirige automáticamente si es exitoso
   
             // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-            notification_url: "https://proyecto-c-payments2-ellococa-git-38db3a-simonpaillans-projects.vercel.app/api/notification"
+            notification_url: "https://proyecto-c-payments2-ellococasaca-cd9xd5kye.vercel.app/api/notification"
           }
   };
   console.log(preferenceData)

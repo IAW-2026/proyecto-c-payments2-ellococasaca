@@ -5,7 +5,7 @@ export async function POST(request: Request) {
     try {
         // Obtain the x-signature and x-request-id values from the headers
         const xSignature = request.headers.get('x-signature');
-        const xRequestId = request.headers.get('x-request-id');
+        const xRequestId = request.headers.get('x-request-id')?.trim();
 
         if (!xSignature || !xRequestId) {
             return NextResponse.json({ error: 'Missing required headers' }, { status: 400 });
@@ -13,10 +13,11 @@ export async function POST(request: Request) {
 
         // Obtain Query params related to the request URL
         const url = new URL(request.url);
-        const dataID = url.searchParams.get('data.id');
+        // Fallback to 'id' if 'data.id' is missing, and ALWAYS lowercase as required by Mercado Pago for alphanumeric IDs
+        const dataID = (url.searchParams.get('data.id') || url.searchParams.get('id'))?.trim().toLowerCase();
 
         if (!dataID) {
-            return NextResponse.json({ error: 'Missing data.id parameter' }, { status: 400 });
+            return NextResponse.json({ error: 'Missing data.id or id parameter' }, { status: 400 });
         }
 
         // Separating the x-signature into parts
@@ -44,9 +45,10 @@ export async function POST(request: Request) {
         if (!ts || !hash) {
             return NextResponse.json({ error: 'Invalid x-signature format' }, { status: 400 });
         }
+        
         // Obtain the secret key for the user/application from Mercadopago developers site
-        // Ideally this should be an environment variable like process.env.MERCADOPAGO_WEBHOOK_SECRET
-        const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET || 'your_secret_key_here';
+        // Make sure to trim it to avoid invisible trailing spaces from environment variables
+        const secret = (process.env.MERCADOPAGO_WEBHOOK_SECRET || 'your_secret_key_here').trim();
 
         // Generate the manifest string
         const manifest = `id:${dataID};request-id:${xRequestId};ts:${ts};`;
@@ -74,6 +76,7 @@ export async function POST(request: Request) {
             console.log("MP HASH:", hash);
             console.log("YOUR HASH:", sha);
             console.log("SECRET:", secret);
+            console.log("NOTE: If hashes do not match, ensure your MERCADOPAGO_WEBHOOK_SECRET is the 'Secret Key' specifically from the Webhook configuration in the MP Developer Dashboard, NOT your Access Token or Client Secret.");
             return NextResponse.json({ error: 'Invalid signature' }, { status: 403 });
         }
     } catch (error) {

@@ -61,11 +61,6 @@ export async function createCharge(formData: FormData) {
       message: 'Database Error: Failed to Create Charge.',
     };
   }
-
-  // TODO: terminar esto
-/*
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');*/
 }
 
 export async function searchMpId(buyer_id: string) { 
@@ -93,6 +88,25 @@ export async function searchCharges(buyer_id: string){
       const charges = await prisma.charges.findMany({
         where: {
           buyer_id: buyer_id
+        }
+        });
+      return charges ? [charges] : [];
+    } catch (error) { 
+      console.error(error)
+      return{  
+        message: 'Database Error'
+      }
+    }
+}
+
+export async function updateCharge(charge_id: string){
+    try {
+      const charges = await prisma.charges.update({
+        where: {
+          id: charge_id
+        },
+        data: {
+          status: 'approved'
         }
         });
       return charges ? [charges] : [];

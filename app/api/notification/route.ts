@@ -1,5 +1,5 @@
 
-import { updateCharge } from "@/app/lib/actions";
+import { createPayout, updateCharge } from "@/app/lib/actions";
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -219,7 +219,10 @@ export async function POST(req: NextRequest) {
 
   if (status === "approved") {  
     updateCharge(charge_id)
+    createPayout(payment.buyer_id, payment.transaction_amount, payment.seller_id, charge_id);
   }
+
+  //todo: notificar al shipment
 
     // ------------------------------------------------------------
     // STEP 10: Acknowledge reception

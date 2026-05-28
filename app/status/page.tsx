@@ -1,11 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { searchCharges } from '../lib/actions';
+import { useUser } from '@clerk/nextjs';
+
+export interface Charge {
+  id: string;
+  order_id: string;
+  amount?: { toString(): string };
+  status?: string | null;
+}
 
 export default function StatusPage() {
-  // This state represents the variable quantity of forms you mentioned.
-  // You can change the initial array or update it dynamically later.
-  const [forms, setForms] = useState([1, 2, 3]);
+  const [charges, setCharges] = useState<Charge[]>([]);
+  const { isLoaded, user } = useUser();
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      searchCharges(user.id).then(response => {
+        if ('message' in response) {
+          console.error(response.message);
+        } else {
+          setCharges(Array.isArray(response) ? response.flat() : []);
+        }
+      }).catch(console.error);
+    }
+  }, [isLoaded, user]);
+  
+  if (!isLoaded) return <div className="min-h-screen bg-white p-8 text-center text-gray-500">Loading...</div>;
+  if (!user) return <div className="min-h-screen bg-white p-8 text-center text-gray-500">Please sign in to view your forms.</div>;
 
   return (
     <div className="min-h-screen bg-white p-8">
@@ -14,35 +37,22 @@ export default function StatusPage() {
         
         {/* Responsive grid for the gray squares */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {forms.map((formId) => (
+          {charges.map((charge, index) => (
             <div 
-              key={formId} 
-              className="bg-gray-100 rounded-lg shadow-md p-6 min-h-[300px] flex flex-col items-center justify-center border border-gray-200"
+              key={charge.id} 
+              className="bg-gray-100 rounded-lg shadow-md p-6 min-h-[300px] flex flex-col items-center justify-center border border-gray-200 overflow-hidden"
             >
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">Form #{formId}</h2>
-              <p className="text-gray-500 text-sm mb-4 text-center">
-                Placeholder for your form content.
-              </p>
-              {/* You can inject your different forms here */}
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">Form #{index + 1}</h2>
+              <div className="text-gray-500 text-sm mb-4 w-full px-4">
+                <div className="space-y-2 text-left bg-white p-4 rounded-md shadow-sm border border-gray-200">
+                  <p className="truncate" title={charge.id}><strong>ID:</strong> {charge.id}</p>
+                  <p className="truncate" title={charge.order_id}><strong>Order ID:</strong> {charge.order_id}</p>
+                  <p><strong>Amount:</strong> {charge.amount?.toString()}</p>
+                  <p><strong>Status:</strong> {charge.status || 'N/A'}</p>
+                </div>
+              </div>
             </div>
           ))}
-        </div>
-
-        {/* Buttons to demonstrate variable quantity */}
-        <div className="mt-8 flex justify-center space-x-4">
-          <button 
-            onClick={() => setForms([...forms, forms.length + 1])}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors"
-          >
-            Add Form
-          </button>
-          <button 
-            onClick={() => setForms(forms.slice(0, -1))}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors"
-            disabled={forms.length === 0}
-          >
-            Remove Form
-          </button>
         </div>
       </div>
     </div>

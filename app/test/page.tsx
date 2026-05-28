@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { id } from 'zod/locales';
+import { useUser } from '@clerk/nextjs'
 
 export default function TestPage() {
   const [item, setItem] = useState('');
@@ -10,11 +10,12 @@ export default function TestPage() {
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { isSignedIn, user, isLoaded } = useUser()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setStatus(null);
-
+    if (!isLoaded || !isSignedIn) return null
     try {
       const response = await fetch('/api/charge', { 
         method: 'POST',
@@ -22,7 +23,7 @@ export default function TestPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          buyer_id:'user_2pLq...',
+          buyer_id: user.id,
           seller_id:'user_2mRt...',
           amount: parseFloat(amount)
         }),

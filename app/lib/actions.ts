@@ -89,6 +89,26 @@ export async function searchCharges(buyer_id: string){
         where: {
           buyer_id: buyer_id
         }
+      });
+      const formattedCharges = charges.map((charge) => ({
+        ...charge,
+        amount: charge.amount?.toString()
+      }));
+      return [formattedCharges];
+    } catch (error) { 
+      console.error(error)
+      return{  
+        message: 'Database Error'
+      }
+    }
+}
+
+export async function searchAllCharges(){
+    try {
+      const charges = await prisma.charges.findMany({
+        where: {
+          
+        }
         });
       return charges ? [charges] : [];
     } catch (error) { 
@@ -118,21 +138,7 @@ export async function updateCharge(charge_id: string){
     }
 }
 
-export async function createPayout(formData: FormData,charge_id:string){
-  const validatedFields = CreateCharge.safeParse({
-    buyer_id: formData.get('buyer_id'),
-    seller_id: formData.get('seller_id'),
-    amount: formData.get('amount')
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields.',
-    };
-  }
-
-  const { buyer_id, seller_id, amount } = validatedFields.data;
+export async function createPayout(buyer_id:string,amount:number,seller_id:string,charge_id:string){
 
   try {
     const payout = await prisma.payouts.create({
@@ -156,22 +162,99 @@ export async function createPayout(formData: FormData,charge_id:string){
   }
 }
 
-export async function createBalance(formData: FormData,charge_id:string) {
-  const validatedFields = CreateCharge.safeParse({
-    buyer_id: formData.get('buyer_id'),
-    seller_id: formData.get('seller_id'),
-    amount: formData.get('amount')
-  });
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields.',
-    };
+export async function acceptPayout(charge_id:string){
+  try {
+    const existingPayout = await prisma.payouts.findFirst({
+      where: {
+        charge_id: charge_id
+      }
+    });
+    if (!existingPayout) return [];
+
+    const payout = await prisma.payouts.update({
+      where: {
+        id: existingPayout.id
+      },
+      data: {
+        status: 'paid'
+      }
+    });
+    return [payout];
+  } catch (error) { 
+    console.error(error)
+    return{
+      message: 'Database Error'
+    }
   }
+}
 
-  const { buyer_id, seller_id, amount } = validatedFields.data;
-  const previous_balance = await getPreviousBalance(buyer_id)
+
+export async function rejectPayout(charge_id:string){
+  try {
+    const existingPayout = await prisma.payouts.findFirst({
+      where: {
+        charge_id: charge_id
+      }
+    });
+    if (!existingPayout) return [];
+
+    const payout = await prisma.payouts.update({
+      where: {
+        id: existingPayout.id
+      },
+      data: {
+        status: 'rejected'
+      }
+    });
+    return [payout];
+  } catch (error) { 
+    console.error(error)
+    return{
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function searchPayout(charge_id:string){
+  try {
+    const payout = await prisma.payouts.findFirst({
+      where: {
+        charge_id: charge_id
+      }
+    });
+    return payout ? [payout] : [];
+  } catch (error) {
+    console.error(error)
+    return{
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function getAmount(charge_id:string){
+  try {
+    const payout = await prisma.payouts.findFirst({
+      where: {
+        charge_id: charge_id
+      },
+      select: {
+        amount: true
+      }
+    });
+    return payout ? payout.amount : 0;
+  } catch (error) {
+    console.error(error)
+    return{
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function createBalance(payout_id: string, charge_id:string, amount : number,seller_id:string) {
+  const buyer_id = await getBuyerId(charge_id)
+
+  const previous_balance = await getPreviousBalance(buyer_id!.toString())
   try {
     const balance = await prisma.balance_logs.create({
       data: {
@@ -213,4 +296,23 @@ export async function getPreviousBalance(buyer_id:string){
     console.error(error);
     return 0;
   }
+}
+
+export async function getBuyerId(buyer_id:string){
+  try {
+    const payout = await prisma.charges.findUnique({
+      where: {
+        id: buyer_id
+      },
+      select: {
+        buyer_id: true
+      }
+    });
+
+    return payout ? payout.buyer_id : 0;
+  } catch (error) {
+    console.error(error);
+    return 0;
+  }
+
 }

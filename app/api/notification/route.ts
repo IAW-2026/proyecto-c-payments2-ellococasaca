@@ -1,7 +1,8 @@
 
-import { createPayout, updateCharge } from "@/app/lib/actions";
+import { createPayout, rejectCharge, updateCharge } from "@/app/lib/actions";
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+
 
 const MP_WEBHOOK_SECRET = process.env.MERCADOPAGO_WEBHOOK_SECRET;
 
@@ -220,9 +221,31 @@ export async function POST(req: NextRequest) {
   if (status === "approved") {  
     updateCharge(charge_id)
     createPayout(payment.buyer_id, payment.transaction_amount, payment.seller_id, charge_id);
+  }else {
+    rejectCharge(charge_id)
   }
 
-  //todo: notificar al shipment
+   try {
+    let shipmentUrl = new URL("/mocks/shipment", req.url).toString();
+    if (shipmentUrl.includes("localhost") && shipmentUrl.startsWith("https://")) {
+      shipmentUrl = shipmentUrl.replace("https://", "http://");
+    }
+    const shipmentResponse = await fetch(shipmentUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        charge_id,
+        status,
+      }),
+    });
+    if (!shipmentResponse.ok) {
+      console.error("Failed to notify shipment API:", shipmentResponse.statusText);
+    }
+  } catch (error) {
+    console.error("Error notifying shipment API:", error);
+  }
 
     // ------------------------------------------------------------
     // STEP 10: Acknowledge reception

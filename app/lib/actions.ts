@@ -138,8 +138,26 @@ export async function updateCharge(charge_id: string){
     }
 }
 
-export async function createPayout(buyer_id:string,amount:number,seller_id:string,charge_id:string){
+export async function rejectCharge(charge_id: string){
+    try {
+      const charges = await prisma.charges.update({
+        where: {
+          id: charge_id
+        },
+        data: {
+          status: 'rejected'
+        }
+        });
+      return charges ? [charges] : [];
+    } catch (error) { 
+      console.error(error)
+      return{  
+        message: 'Database Error'
+      }
+    }
+}
 
+export async function createPayout(buyer_id:string,amount:number,seller_id:string,charge_id:string){
   try {
     const payout = await prisma.payouts.create({
       data: {
@@ -254,14 +272,14 @@ export async function getAmount(charge_id:string){
 export async function createBalance(payout_id: string, charge_id:string, amount : number,seller_id:string) {
   const buyer_id = await getBuyerId(charge_id)
 
-  const previous_balance = await getPreviousBalance(buyer_id!.toString())
+  const previous_balance = await getPreviousBalance(seller_id!.toString())
   try {
     const balance = await prisma.balance_logs.create({
       data: {
         user_id:seller_id ,
         amount_change: amount,
         previous_balance: previous_balance,
-        new_balance: previous_balance + amount.toPrecision(2),
+        new_balance: Number(previous_balance) + (amount),
         transaction_type: 'SALE_REVENUE',
         reference_id: charge_id,
       },
@@ -269,7 +287,9 @@ export async function createBalance(payout_id: string, charge_id:string, amount 
         id: true,
       },
     });
-
+    console.log("balance amount:", previous_balance)
+    console.log("amount:", amount.toPrecision(2));
+    console.log("new balance:", Number(previous_balance) + (amount));
     return balance.id;
   } catch (error) {
     console.error(error);
@@ -282,6 +302,7 @@ export async function createBalance(payout_id: string, charge_id:string, amount 
 
 export async function getPreviousBalance(buyer_id:string){
   try {
+    
     const payout = await prisma.users.findUnique({
       where: {
         clerk_id: buyer_id
@@ -290,7 +311,7 @@ export async function getPreviousBalance(buyer_id:string){
         balance: true
       }
     });
-
+    console.log("previous balance:", payout?.balance);
     return payout ? payout.balance : 0;
   } catch (error) {
     console.error(error);
@@ -315,4 +336,32 @@ export async function getBuyerId(buyer_id:string){
     return 0;
   }
 
+}
+
+export async function addBalance(seller_id:string, amount:number){
+  try {
+    const user = await prisma.users.findUnique({
+      where: {
+        clerk_id: seller_id
+      },
+      select: {
+        balance: true
+      }
+    });
+
+    if (!user) return;
+
+    const newBalance = Number(user.balance) + (amount);
+
+    await prisma.users.update({
+      where: {
+        clerk_id: seller_id
+      },
+      data: {
+        balance: newBalance
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }

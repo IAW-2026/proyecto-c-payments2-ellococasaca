@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         )
     }
 
-    const payoutResult = await createPayout(buyer_id, amount, buyer_id!, seller_id!)
+    const payoutResult = await createPayout(buyer_id, amount, seller_id, chargeResult)
 
     console.log("anashe")
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_token!});
@@ -64,14 +64,14 @@ export async function POST(req: NextRequest) {
   
             // URLs de retorno: A dónde vuelve el usuario tras pagar
             back_urls: {
-              success: "https://proyecto-c-payments2-ellococasaca-dye6q58q6.vercel.app",
-              failure: "https://proyecto-c-payments2-ellococasaca-dye6q58q6.vercel.app",
-              pending: "https://proyecto-c-payments2-ellococasaca-dye6q58q6.vercel.app"
+              success: "https://proyecto-c-payments2-ellococasaca.vercel.app/",
+              failure: "https://proyecto-c-payments2-ellococasaca.vercel.app/",
+              pending: "https://proyecto-c-payments2-ellococasaca.vercel.app/"
             },
             auto_return: "approved", // Redirige automáticamente si es exitoso
   
             // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-            notification_url: ""
+            notification_url: "https://proyecto-c-payments2-ellococasaca.vercel.app/api/notification"
           }
   };
   

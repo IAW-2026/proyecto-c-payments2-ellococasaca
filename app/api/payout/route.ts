@@ -1,7 +1,7 @@
 'use server'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { acceptPayout,createBalance,rejectPayout, searchPayout } from '../../lib/actions'
+import { acceptPayout,addBalance,createBalance,rejectPayout, searchPayout } from '../../lib/actions'
 
 
 export async function POST(req: NextRequest) {
@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
         )
       }
       if (payoutId) {
-   
         createBalance(payoutId, charge_id, Number(amount), seller_id!)
+        addBalance(seller_id!, Number(amount))
       }
     }
     else {

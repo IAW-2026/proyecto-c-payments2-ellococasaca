@@ -21,7 +21,7 @@ model balance_logs {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model charges {
-  id            String    @id @db.Uuid
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   order_id      String    @db.VarChar(255)
   buyer_id      String?   @db.VarChar(255)
   amount        Decimal   @db.Decimal(15, 2)
@@ -34,7 +34,7 @@ model charges {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model payouts {
-  id         String    @id @db.Uuid
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   seller_id  String?   @db.VarChar(255)
   amount     Decimal   @db.Decimal(15, 2)
   status     String?   @db.VarChar(50)

@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
 
     const payoutResult = await createPayout(buyer_id, amount, seller_id, chargeResult)
 
-    console.log("anashe")
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_token!});
 
     // 3. Estructuramos el payload (los datos) que exige MercadoPago
@@ -71,7 +70,7 @@ export async function POST(req: NextRequest) {
             auto_return: "approved", // Redirige automáticamente si es exitoso
   
             // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-            notification_url: "https://proyecto-c-payments2-ellococasaca.vercel.app/api/notification"
+            notification_url: "https://maroon-dawdler-tug.ngrok-free.dev/api/notification"
           }
   };
   

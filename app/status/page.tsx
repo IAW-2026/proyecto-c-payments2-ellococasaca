@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { searchCharges, searchPayoutsByUser } from '../lib/actions';
 import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 
 export interface Charge {
   id: string;
-  order_id: string;
   amount?: { toString(): string };
   status?: string | null;
 }
@@ -65,9 +65,17 @@ export default function StatusPage() {
         
         {/* COMPRAS SECTION */}
         <section>
-          <h1 className="text-4xl md:text-5xl text-gray-900 mb-8 text-center font-black uppercase italic tracking-tighter">
-            Compras
-          </h1>
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h1 className="text-4xl md:text-5xl text-gray-900 text-center font-black uppercase italic tracking-tighter m-0">
+              Compras
+            </h1>
+            <Link 
+              href="/status/charges"
+              className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 text-sm"
+            >
+              View All Charges
+            </Link>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {charges.length === 0 ? (
@@ -88,7 +96,6 @@ export default function StatusPage() {
                 
                 <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-5 flex-grow">
                   <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">ID</span><span className="text-sm font-bold text-gray-900 truncate" title={charge.id}>{charge.id}</span></div>
-                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Order ID</span><span className="text-sm font-bold text-gray-900 truncate" title={charge.order_id}>{charge.order_id}</span></div>
                   <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Amount</span><span className="text-xl text-blue-600 font-black tracking-tighter italic truncate">${charge.amount?.toString() || '0.00'}</span></div>
                 </div>
               </div>
@@ -100,9 +107,17 @@ export default function StatusPage() {
 
         {/* VENTAS SECTION */}
         <section>
-          <h1 className="text-4xl md:text-5xl text-gray-900 mb-8 text-center font-black uppercase italic tracking-tighter">
-            Ventas
-          </h1>
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h1 className="text-4xl md:text-5xl text-gray-900 text-center font-black uppercase italic tracking-tighter m-0">
+              Ventas
+            </h1>
+            <Link 
+              href="/status/payouts"
+              className="px-6 py-3 bg-green-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20 text-sm"
+            >
+              View All Payouts
+            </Link>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {payouts.length === 0 ? (

@@ -24,7 +24,7 @@ export default function TestPage() {
         },
         body: JSON.stringify({
           buyer_id: user.id,
-          seller_id:'user_2mRt...',
+          seller_id:'user_3EHh...',
           amount: parseFloat(amount)
         }),
       });

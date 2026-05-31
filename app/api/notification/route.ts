@@ -1,5 +1,5 @@
 
-import { createPayout, rejectCharge, updateCharge } from "@/app/lib/actions";
+import { addMPId, createPayout, rejectCharge, updateCharge } from "@/app/lib/actions";
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -220,6 +220,7 @@ export async function POST(req: NextRequest) {
 
   if (status === "approved") {  
     updateCharge(charge_id)
+    addMPId(charge_id, payment.id.toString())
     createPayout(payment.buyer_id, payment.transaction_amount, payment.seller_id, charge_id);
   }else {
     rejectCharge(charge_id)

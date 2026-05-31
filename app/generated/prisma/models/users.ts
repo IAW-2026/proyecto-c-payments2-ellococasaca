@@ -36,7 +36,6 @@ export type UsersSumAggregateOutputType = {
 
 export type UsersMinAggregateOutputType = {
   clerk_id: string | null
-  mp_customer_id: string | null
   balance: runtime.Decimal | null
   created_at: Date | null
   updated_at: Date | null
@@ -44,7 +43,6 @@ export type UsersMinAggregateOutputType = {
 
 export type UsersMaxAggregateOutputType = {
   clerk_id: string | null
-  mp_customer_id: string | null
   balance: runtime.Decimal | null
   created_at: Date | null
   updated_at: Date | null
@@ -52,7 +50,6 @@ export type UsersMaxAggregateOutputType = {
 
 export type UsersCountAggregateOutputType = {
   clerk_id: number
-  mp_customer_id: number
   balance: number
   created_at: number
   updated_at: number
@@ -70,7 +67,6 @@ export type UsersSumAggregateInputType = {
 
 export type UsersMinAggregateInputType = {
   clerk_id?: true
-  mp_customer_id?: true
   balance?: true
   created_at?: true
   updated_at?: true
@@ -78,7 +74,6 @@ export type UsersMinAggregateInputType = {
 
 export type UsersMaxAggregateInputType = {
   clerk_id?: true
-  mp_customer_id?: true
   balance?: true
   created_at?: true
   updated_at?: true
@@ -86,7 +81,6 @@ export type UsersMaxAggregateInputType = {
 
 export type UsersCountAggregateInputType = {
   clerk_id?: true
-  mp_customer_id?: true
   balance?: true
   created_at?: true
   updated_at?: true
@@ -181,7 +175,6 @@ export type usersGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type UsersGroupByOutputType = {
   clerk_id: string
-  mp_customer_id: string | null
   balance: runtime.Decimal
   created_at: Date | null
   updated_at: Date | null
@@ -212,7 +205,6 @@ export type usersWhereInput = {
   OR?: Prisma.usersWhereInput[]
   NOT?: Prisma.usersWhereInput | Prisma.usersWhereInput[]
   clerk_id?: Prisma.StringFilter<"users"> | string
-  mp_customer_id?: Prisma.StringNullableFilter<"users"> | string | null
   balance?: Prisma.DecimalFilter<"users"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
@@ -223,7 +215,6 @@ export type usersWhereInput = {
 
 export type usersOrderByWithRelationInput = {
   clerk_id?: Prisma.SortOrder
-  mp_customer_id?: Prisma.SortOrderInput | Prisma.SortOrder
   balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -237,7 +228,6 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.usersWhereInput | Prisma.usersWhereInput[]
   OR?: Prisma.usersWhereInput[]
   NOT?: Prisma.usersWhereInput | Prisma.usersWhereInput[]
-  mp_customer_id?: Prisma.StringNullableFilter<"users"> | string | null
   balance?: Prisma.DecimalFilter<"users"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
@@ -248,7 +238,6 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
 
 export type usersOrderByWithAggregationInput = {
   clerk_id?: Prisma.SortOrder
-  mp_customer_id?: Prisma.SortOrderInput | Prisma.SortOrder
   balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -264,7 +253,6 @@ export type usersScalarWhereWithAggregatesInput = {
   OR?: Prisma.usersScalarWhereWithAggregatesInput[]
   NOT?: Prisma.usersScalarWhereWithAggregatesInput | Prisma.usersScalarWhereWithAggregatesInput[]
   clerk_id?: Prisma.StringWithAggregatesFilter<"users"> | string
-  mp_customer_id?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   balance?: Prisma.DecimalWithAggregatesFilter<"users"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
@@ -272,7 +260,6 @@ export type usersScalarWhereWithAggregatesInput = {
 
 export type usersCreateInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -283,7 +270,6 @@ export type usersCreateInput = {
 
 export type usersUncheckedCreateInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -294,7 +280,6 @@ export type usersUncheckedCreateInput = {
 
 export type usersUpdateInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -305,7 +290,6 @@ export type usersUpdateInput = {
 
 export type usersUncheckedUpdateInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -316,7 +300,6 @@ export type usersUncheckedUpdateInput = {
 
 export type usersCreateManyInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -324,7 +307,6 @@ export type usersCreateManyInput = {
 
 export type usersUpdateManyMutationInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -332,7 +314,6 @@ export type usersUpdateManyMutationInput = {
 
 export type usersUncheckedUpdateManyInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -345,7 +326,6 @@ export type UsersNullableScalarRelationFilter = {
 
 export type usersCountOrderByAggregateInput = {
   clerk_id?: Prisma.SortOrder
-  mp_customer_id?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -357,7 +337,6 @@ export type usersAvgOrderByAggregateInput = {
 
 export type usersMaxOrderByAggregateInput = {
   clerk_id?: Prisma.SortOrder
-  mp_customer_id?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -365,7 +344,6 @@ export type usersMaxOrderByAggregateInput = {
 
 export type usersMinOrderByAggregateInput = {
   clerk_id?: Prisma.SortOrder
-  mp_customer_id?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
@@ -425,7 +403,6 @@ export type usersUpdateOneWithoutPayoutsNestedInput = {
 
 export type usersCreateWithoutBalance_logsInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -435,7 +412,6 @@ export type usersCreateWithoutBalance_logsInput = {
 
 export type usersUncheckedCreateWithoutBalance_logsInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -461,7 +437,6 @@ export type usersUpdateToOneWithWhereWithoutBalance_logsInput = {
 
 export type usersUpdateWithoutBalance_logsInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -471,7 +446,6 @@ export type usersUpdateWithoutBalance_logsInput = {
 
 export type usersUncheckedUpdateWithoutBalance_logsInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481,7 +455,6 @@ export type usersUncheckedUpdateWithoutBalance_logsInput = {
 
 export type usersCreateWithoutChargesInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -491,7 +464,6 @@ export type usersCreateWithoutChargesInput = {
 
 export type usersUncheckedCreateWithoutChargesInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -517,7 +489,6 @@ export type usersUpdateToOneWithWhereWithoutChargesInput = {
 
 export type usersUpdateWithoutChargesInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -527,7 +498,6 @@ export type usersUpdateWithoutChargesInput = {
 
 export type usersUncheckedUpdateWithoutChargesInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -537,7 +507,6 @@ export type usersUncheckedUpdateWithoutChargesInput = {
 
 export type usersCreateWithoutPayoutsInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -547,7 +516,6 @@ export type usersCreateWithoutPayoutsInput = {
 
 export type usersUncheckedCreateWithoutPayoutsInput = {
   clerk_id: string
-  mp_customer_id?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string | null
   updated_at?: Date | string | null
@@ -573,7 +541,6 @@ export type usersUpdateToOneWithWhereWithoutPayoutsInput = {
 
 export type usersUpdateWithoutPayoutsInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -583,7 +550,6 @@ export type usersUpdateWithoutPayoutsInput = {
 
 export type usersUncheckedUpdateWithoutPayoutsInput = {
   clerk_id?: Prisma.StringFieldUpdateOperationsInput | string
-  mp_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -642,7 +608,6 @@ export type UsersCountOutputTypeCountPayoutsArgs<ExtArgs extends runtime.Types.E
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   clerk_id?: boolean
-  mp_customer_id?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -654,7 +619,6 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 
 export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   clerk_id?: boolean
-  mp_customer_id?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -662,7 +626,6 @@ export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   clerk_id?: boolean
-  mp_customer_id?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
@@ -670,13 +633,12 @@ export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type usersSelectScalar = {
   clerk_id?: boolean
-  mp_customer_id?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"clerk_id" | "mp_customer_id" | "balance" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"clerk_id" | "balance" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   balance_logs?: boolean | Prisma.users$balance_logsArgs<ExtArgs>
   charges?: boolean | Prisma.users$chargesArgs<ExtArgs>
@@ -695,7 +657,6 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     clerk_id: string
-    mp_customer_id: string | null
     balance: runtime.Decimal
     created_at: Date | null
     updated_at: Date | null
@@ -1126,7 +1087,6 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface usersFieldRefs {
   readonly clerk_id: Prisma.FieldRef<"users", 'String'>
-  readonly mp_customer_id: Prisma.FieldRef<"users", 'String'>
   readonly balance: Prisma.FieldRef<"users", 'Decimal'>
   readonly created_at: Prisma.FieldRef<"users", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"users", 'DateTime'>

@@ -38,16 +38,14 @@ export async function createCharge(formData: FormData) {
   }
   
   const { buyer_id, seller_id, amount } = validatedFields.data;
-  const mp_id_result = await searchMpId(buyer_id);
 
   try {
     const charge = await prisma.charges.create({
       data: {
-        order_id: '07',
         buyer_id: buyer_id,
         amount: amount,
         status: 'pending',
-        mp_payment_id: Array.isArray(mp_id_result) ? mp_id_result[0]?.mp_customer_id : null,
+        mp_payment_id: null,
       },
       select: {
         id: true,
@@ -63,22 +61,21 @@ export async function createCharge(formData: FormData) {
   }
 }
 
-export async function searchMpId(buyer_id: string) { 
+export async function addMPId(charge_id: string, mp_payment_id: string  ){
   try {
-    const user = await prisma.users.findUnique({
+    const charge = await prisma.charges.update({
       where: {
-        clerk_id: buyer_id
+        id: charge_id
       },
-      select: {
-        mp_customer_id: true
+      data: {
+        mp_payment_id: mp_payment_id
       }
     });
-
-    return user ? [user] : [];
+    return charge ? [charge] : [];
   } catch (error) {
     console.error(error);
     return {
-      message: 'Database Error: MercadoPago id not found.',
+      message: 'Database Error: Failed to Update Charge.',
     };
   }
 }
@@ -438,4 +435,23 @@ export async function addBalance(seller_id:string, amount:number){
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function createUser(clerk_id: string){
+  try {
+    const user = await prisma.users.create({
+      data: {
+        clerk_id: clerk_id,
+        balance: 0,
+      },
+      select: {
+        clerk_id: true,
+      },
+    });
+    return user.clerk_id;
+  } catch (error) {
+    console.error(error);
+    return console.error('Database Error: Failed to Create User.');
+  }
+
 }

@@ -36,7 +36,6 @@ export type ChargesSumAggregateOutputType = {
 
 export type ChargesMinAggregateOutputType = {
   id: string | null
-  order_id: string | null
   buyer_id: string | null
   amount: runtime.Decimal | null
   status: string | null
@@ -46,7 +45,6 @@ export type ChargesMinAggregateOutputType = {
 
 export type ChargesMaxAggregateOutputType = {
   id: string | null
-  order_id: string | null
   buyer_id: string | null
   amount: runtime.Decimal | null
   status: string | null
@@ -56,7 +54,6 @@ export type ChargesMaxAggregateOutputType = {
 
 export type ChargesCountAggregateOutputType = {
   id: number
-  order_id: number
   buyer_id: number
   amount: number
   status: number
@@ -76,7 +73,6 @@ export type ChargesSumAggregateInputType = {
 
 export type ChargesMinAggregateInputType = {
   id?: true
-  order_id?: true
   buyer_id?: true
   amount?: true
   status?: true
@@ -86,7 +82,6 @@ export type ChargesMinAggregateInputType = {
 
 export type ChargesMaxAggregateInputType = {
   id?: true
-  order_id?: true
   buyer_id?: true
   amount?: true
   status?: true
@@ -96,7 +91,6 @@ export type ChargesMaxAggregateInputType = {
 
 export type ChargesCountAggregateInputType = {
   id?: true
-  order_id?: true
   buyer_id?: true
   amount?: true
   status?: true
@@ -193,7 +187,6 @@ export type chargesGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type ChargesGroupByOutputType = {
   id: string
-  order_id: string
   buyer_id: string | null
   amount: runtime.Decimal
   status: string | null
@@ -226,7 +219,6 @@ export type chargesWhereInput = {
   OR?: Prisma.chargesWhereInput[]
   NOT?: Prisma.chargesWhereInput | Prisma.chargesWhereInput[]
   id?: Prisma.UuidFilter<"charges"> | string
-  order_id?: Prisma.StringFilter<"charges"> | string
   buyer_id?: Prisma.StringNullableFilter<"charges"> | string | null
   amount?: Prisma.DecimalFilter<"charges"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.StringNullableFilter<"charges"> | string | null
@@ -238,7 +230,6 @@ export type chargesWhereInput = {
 
 export type chargesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  order_id?: Prisma.SortOrder
   buyer_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -253,7 +244,6 @@ export type chargesWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.chargesWhereInput | Prisma.chargesWhereInput[]
   OR?: Prisma.chargesWhereInput[]
   NOT?: Prisma.chargesWhereInput | Prisma.chargesWhereInput[]
-  order_id?: Prisma.StringFilter<"charges"> | string
   buyer_id?: Prisma.StringNullableFilter<"charges"> | string | null
   amount?: Prisma.DecimalFilter<"charges"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.StringNullableFilter<"charges"> | string | null
@@ -265,7 +255,6 @@ export type chargesWhereUniqueInput = Prisma.AtLeast<{
 
 export type chargesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  order_id?: Prisma.SortOrder
   buyer_id?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -283,7 +272,6 @@ export type chargesScalarWhereWithAggregatesInput = {
   OR?: Prisma.chargesScalarWhereWithAggregatesInput[]
   NOT?: Prisma.chargesScalarWhereWithAggregatesInput | Prisma.chargesScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"charges"> | string
-  order_id?: Prisma.StringWithAggregatesFilter<"charges"> | string
   buyer_id?: Prisma.StringNullableWithAggregatesFilter<"charges"> | string | null
   amount?: Prisma.DecimalWithAggregatesFilter<"charges"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.StringNullableWithAggregatesFilter<"charges"> | string | null
@@ -293,7 +281,6 @@ export type chargesScalarWhereWithAggregatesInput = {
 
 export type chargesCreateInput = {
   id?: string
-  order_id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
   mp_payment_id?: string | null
@@ -304,7 +291,6 @@ export type chargesCreateInput = {
 
 export type chargesUncheckedCreateInput = {
   id?: string
-  order_id: string
   buyer_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
@@ -315,7 +301,6 @@ export type chargesUncheckedCreateInput = {
 
 export type chargesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mp_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -326,7 +311,6 @@ export type chargesUpdateInput = {
 
 export type chargesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   buyer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -337,7 +321,6 @@ export type chargesUncheckedUpdateInput = {
 
 export type chargesCreateManyInput = {
   id?: string
-  order_id: string
   buyer_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
@@ -347,7 +330,6 @@ export type chargesCreateManyInput = {
 
 export type chargesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mp_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -356,7 +338,6 @@ export type chargesUpdateManyMutationInput = {
 
 export type chargesUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   buyer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -366,7 +347,6 @@ export type chargesUncheckedUpdateManyInput = {
 
 export type chargesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  order_id?: Prisma.SortOrder
   buyer_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -380,7 +360,6 @@ export type chargesAvgOrderByAggregateInput = {
 
 export type chargesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  order_id?: Prisma.SortOrder
   buyer_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -390,7 +369,6 @@ export type chargesMaxOrderByAggregateInput = {
 
 export type chargesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  order_id?: Prisma.SortOrder
   buyer_id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -481,7 +459,6 @@ export type chargesUncheckedUpdateManyWithoutUsersNestedInput = {
 
 export type chargesCreateWithoutPayoutsInput = {
   id?: string
-  order_id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
   mp_payment_id?: string | null
@@ -491,7 +468,6 @@ export type chargesCreateWithoutPayoutsInput = {
 
 export type chargesUncheckedCreateWithoutPayoutsInput = {
   id?: string
-  order_id: string
   buyer_id?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
@@ -517,7 +493,6 @@ export type chargesUpdateToOneWithWhereWithoutPayoutsInput = {
 
 export type chargesUpdateWithoutPayoutsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mp_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -527,7 +502,6 @@ export type chargesUpdateWithoutPayoutsInput = {
 
 export type chargesUncheckedUpdateWithoutPayoutsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   buyer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -537,7 +511,6 @@ export type chargesUncheckedUpdateWithoutPayoutsInput = {
 
 export type chargesCreateWithoutUsersInput = {
   id?: string
-  order_id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
   mp_payment_id?: string | null
@@ -547,7 +520,6 @@ export type chargesCreateWithoutUsersInput = {
 
 export type chargesUncheckedCreateWithoutUsersInput = {
   id?: string
-  order_id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
   mp_payment_id?: string | null
@@ -586,7 +558,6 @@ export type chargesScalarWhereInput = {
   OR?: Prisma.chargesScalarWhereInput[]
   NOT?: Prisma.chargesScalarWhereInput | Prisma.chargesScalarWhereInput[]
   id?: Prisma.UuidFilter<"charges"> | string
-  order_id?: Prisma.StringFilter<"charges"> | string
   buyer_id?: Prisma.StringNullableFilter<"charges"> | string | null
   amount?: Prisma.DecimalFilter<"charges"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.StringNullableFilter<"charges"> | string | null
@@ -596,7 +567,6 @@ export type chargesScalarWhereInput = {
 
 export type chargesCreateManyUsersInput = {
   id?: string
-  order_id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: string | null
   mp_payment_id?: string | null
@@ -605,7 +575,6 @@ export type chargesCreateManyUsersInput = {
 
 export type chargesUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mp_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -615,7 +584,6 @@ export type chargesUpdateWithoutUsersInput = {
 
 export type chargesUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mp_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -625,7 +593,6 @@ export type chargesUncheckedUpdateWithoutUsersInput = {
 
 export type chargesUncheckedUpdateManyWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  order_id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mp_payment_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -665,7 +632,6 @@ export type ChargesCountOutputTypeCountPayoutsArgs<ExtArgs extends runtime.Types
 
 export type chargesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  order_id?: boolean
   buyer_id?: boolean
   amount?: boolean
   status?: boolean
@@ -678,7 +644,6 @@ export type chargesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type chargesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  order_id?: boolean
   buyer_id?: boolean
   amount?: boolean
   status?: boolean
@@ -689,7 +654,6 @@ export type chargesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type chargesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  order_id?: boolean
   buyer_id?: boolean
   amount?: boolean
   status?: boolean
@@ -700,7 +664,6 @@ export type chargesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type chargesSelectScalar = {
   id?: boolean
-  order_id?: boolean
   buyer_id?: boolean
   amount?: boolean
   status?: boolean
@@ -708,7 +671,7 @@ export type chargesSelectScalar = {
   created_at?: boolean
 }
 
-export type chargesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "order_id" | "buyer_id" | "amount" | "status" | "mp_payment_id" | "created_at", ExtArgs["result"]["charges"]>
+export type chargesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "buyer_id" | "amount" | "status" | "mp_payment_id" | "created_at", ExtArgs["result"]["charges"]>
 export type chargesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.charges$usersArgs<ExtArgs>
   payouts?: boolean | Prisma.charges$payoutsArgs<ExtArgs>
@@ -729,7 +692,6 @@ export type $chargesPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    order_id: string
     buyer_id: string | null
     amount: runtime.Decimal
     status: string | null
@@ -1161,7 +1123,6 @@ export interface Prisma__chargesClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface chargesFieldRefs {
   readonly id: Prisma.FieldRef<"charges", 'String'>
-  readonly order_id: Prisma.FieldRef<"charges", 'String'>
   readonly buyer_id: Prisma.FieldRef<"charges", 'String'>
   readonly amount: Prisma.FieldRef<"charges", 'Decimal'>
   readonly status: Prisma.FieldRef<"charges", 'String'>

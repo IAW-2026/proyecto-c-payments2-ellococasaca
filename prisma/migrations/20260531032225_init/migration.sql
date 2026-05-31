@@ -1,6 +1,3 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateTable
 CREATE TABLE "balance_logs" (
     "id" SERIAL NOT NULL,
@@ -17,8 +14,7 @@ CREATE TABLE "balance_logs" (
 
 -- CreateTable
 CREATE TABLE "charges" (
-    "id" UUID NOT NULL,
-    "order_id" VARCHAR(255) NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "buyer_id" VARCHAR(255),
     "amount" DECIMAL(15,2) NOT NULL,
     "status" VARCHAR(50),
@@ -30,7 +26,7 @@ CREATE TABLE "charges" (
 
 -- CreateTable
 CREATE TABLE "payouts" (
-    "id" UUID NOT NULL ,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "seller_id" VARCHAR(255),
     "amount" DECIMAL(15,2) NOT NULL,
     "status" VARCHAR(50),
@@ -43,7 +39,6 @@ CREATE TABLE "payouts" (
 -- CreateTable
 CREATE TABLE "users" (
     "clerk_id" VARCHAR(255) NOT NULL,
-    "mp_customer_id" VARCHAR(255),
     "balance" DECIMAL(15,2) NOT NULL DEFAULT 0.00,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
@@ -62,4 +57,3 @@ ALTER TABLE "payouts" ADD CONSTRAINT "payouts_charge_id_fkey" FOREIGN KEY ("char
 
 -- AddForeignKey
 ALTER TABLE "payouts" ADD CONSTRAINT "payouts_seller_id_fkey" FOREIGN KEY ("seller_id") REFERENCES "users"("clerk_id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-

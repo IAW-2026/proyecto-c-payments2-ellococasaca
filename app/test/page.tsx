@@ -50,7 +50,9 @@ export default function TestPage() {
   };
 
   return (
+    
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      
       <form onSubmit={handleSubmit} className="bg-gray-100 p-8 rounded-lg shadow-lg w-full max-w-md flex flex-col gap-4">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Payment Details</h2>
         

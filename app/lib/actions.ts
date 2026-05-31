@@ -88,6 +88,33 @@ export async function searchCharges(buyer_id: string){
       const charges = await prisma.charges.findMany({
         where: {
           buyer_id: buyer_id
+        },
+        orderBy: {
+          created_at: 'desc'
+        },
+        take: 9
+      });
+      const formattedCharges = charges.map((charge) => ({
+        ...charge,
+        amount: charge.amount?.toString()
+      }));
+      return [formattedCharges];
+    } catch (error) { 
+      console.error(error)
+      return{  
+        message: 'Database Error'
+      }
+    }
+}
+
+export async function searchAllChargesByUser(buyer_id: string){
+    try {
+      const charges = await prisma.charges.findMany({
+        where: {
+          buyer_id: buyer_id
+        },
+        orderBy: {
+          created_at: 'desc'
         }
       });
       const formattedCharges = charges.map((charge) => ({
@@ -242,6 +269,53 @@ export async function searchPayout(charge_id:string){
       }
     });
     return payout ? [payout] : [];
+  } catch (error) {
+    console.error(error)
+    return{
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function searchAllPayoutsByUser(seller_id: string){
+  try {
+    const payouts = await prisma.payouts.findMany({
+      where: {
+        seller_id: seller_id
+      },
+      orderBy: {
+        created_at: 'desc'
+      }
+    });
+    const formattedPayouts = payouts.map((payout) => ({
+      ...payout,
+      amount: payout.amount?.toString()
+    }));
+    return [formattedPayouts];
+  } catch (error) {
+    console.error(error)
+    return{
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function searchPayoutsByUser(seller_id: string){
+  try {
+    const payouts = await prisma.payouts.findMany({
+      where: {
+        seller_id: seller_id
+      },
+      orderBy: {
+        created_at: 'desc'
+      },
+      take: 9
+    });
+    const formattedPayouts = payouts.map((payout) => ({
+      ...payout,
+      amount: payout.amount?.toString()
+    }));
+    return [formattedPayouts];
   } catch (error) {
     console.error(error)
     return{

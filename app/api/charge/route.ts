@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         auto_return: "approved", // Redirige automáticamente si es exitoso
 
         // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-        notification_url: "https://maroon-dawdler-tug.ngrok-free.dev/api/notification",
+        notification_url: "https://proyecto-c-payments2-ellococasaca-mpsbr2j4d.vercel.app/api/notification",
       }
     };
     // 4. Enviamos los datos a MercadoPago para crear el intento de pago

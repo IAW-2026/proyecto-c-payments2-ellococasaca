@@ -6,7 +6,6 @@ import { useUser } from '@clerk/nextjs'
 export default function TestPage() {
   const [item, setItem] = useState('');
   const [amount, setAmount] = useState('');
-  const [quantity, setQuantity] = useState('1');
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -83,21 +82,6 @@ export default function TestPage() {
             placeholder="0.00"
             step="0.01"
             min="0"
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label htmlFor="quantity" className="text-sm font-medium text-gray-700">Quantity</label>
-          <input 
-            type="number" 
-            id="quantity" 
-            name="quantity" 
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            required
-            className="border border-gray-300 bg-white text-gray-900 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="1"
-            min="1"
           />
         </div>
 

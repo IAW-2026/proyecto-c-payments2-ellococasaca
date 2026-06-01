@@ -32,7 +32,6 @@ export default async function DataViewer() {
               {charges.map(charge => (
                 <tr key={charge.id} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border">{charge.id}</td>
-                  <td className="py-2 px-4 border">{charge.order_id}</td>
                   <td className="py-2 px-4 border">{charge.buyer_id || 'N/A'}</td>
                   <td className="py-2 px-4 border">{charge.amount?.toString()}</td>
                   <td className="py-2 px-4 border">{charge.status || 'N/A'}</td>

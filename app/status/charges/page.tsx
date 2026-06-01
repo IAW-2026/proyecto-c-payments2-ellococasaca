@@ -1,47 +1,25 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import { searchAllChargesByUser } from '../../lib/actions';
-import { useUser } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 
 export interface Charge {
   id: string;
-  order_id: string;
   amount?: { toString(): string };
   status?: string | null;
 }
 
-export default function ChargesListPage() {
-  const [charges, setCharges] = useState<Charge[]>([]);
-  const { isLoaded, user } = useUser();
-
-  useEffect(() => {
-    if (isLoaded && user) {
-      searchAllChargesByUser(user.id).then(response => {
-        if ('message' in response) {
-          console.error(response.message);
-        } else {
-          setCharges(Array.isArray(response) ? response.flat() : []);
-        }
-      }).catch(console.error);
-    }
-  }, [isLoaded, user]);
+export default async function ChargesListPage() {
+  const { userId } = await auth();
   
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
-        <div className="text-blue-600 text-2xl font-black uppercase italic tracking-tighter animate-pulse">Loading...</div>
-      </div>
-    );
-  }
-  
-  if (!user) {
+  if (!userId) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8 text-center text-gray-500">
         <div className="text-xl font-bold uppercase tracking-widest text-gray-500">Please sign in to view your charges.</div>
       </div>
     );
   }
+
+  const response = await searchAllChargesByUser(userId);
+  const charges = Array.isArray(response) && !('message' in response) ? response.flat() as Charge[] : [];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -78,10 +56,6 @@ export default function ChargesListPage() {
                   <div className="flex flex-col">
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-1">ID</span>
                     <span className="font-medium font-mono text-xs" title={charge.id}>{charge.id}</span>
-                  </div>
-                  <div className="flex flex-col mt-2 md:mt-0">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-1">Order ID</span>
-                    <span className="font-medium font-mono text-xs" title={charge.order_id}>{charge.order_id}</span>
                   </div>
                 </div>
               </div>

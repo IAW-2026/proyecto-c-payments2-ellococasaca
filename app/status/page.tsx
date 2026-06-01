@@ -1,8 +1,5 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { searchCharges, searchPayoutsByUser } from '../lib/actions';
-import { useUser } from '@clerk/nextjs';
+import { searchCharges, searchPayoutsByUser, syncUser } from '../lib/actions';
+import { auth } from '@clerk/nextjs/server';
 import Link from 'next/link';
 
 export interface Charge {
@@ -18,46 +15,31 @@ export interface Payout {
   status?: string | null;
 }
 
-export default function StatusPage() {
-  const [charges, setCharges] = useState<Charge[]>([]);
-  const [payouts, setPayouts] = useState<Payout[]>([]);
-  const { isLoaded, user } = useUser();
-
-  useEffect(() => {
-    if (isLoaded && user) {
-      searchCharges(user.id).then(response => {
-        if ('message' in response) {
-          console.error(response.message);
-        } else {
-          setCharges(Array.isArray(response) ? response.flat() : []);
-        }
-      }).catch(console.error);
-
-      searchPayoutsByUser(user.id).then(response => {
-        if ('message' in response) {
-          console.error(response.message);
-        } else {
-          setPayouts(Array.isArray(response) ? response.flat() : []);
-        }
-      }).catch(console.error);
-    }
-  }, [isLoaded, user]);
+export default async function StatusPage() {
+  const { userId } = await auth();
   
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
-        <div className="text-blue-600 text-2xl font-black uppercase italic tracking-tighter animate-pulse">Loading...</div>
-      </div>
-    );
-  }
-  
-  if (!user) {
+  if (!userId) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8 text-center text-gray-500">
         <div className="text-xl font-bold uppercase tracking-widest text-gray-500">Please sign in to view your forms.</div>
       </div>
     );
   }
+
+  await syncUser(userId);
+
+  const [chargesResponse, payoutsResponse] = await Promise.all([
+    searchCharges(userId),
+    searchPayoutsByUser(userId)
+  ]);
+
+  const charges = Array.isArray(chargesResponse) && !('message' in chargesResponse)
+    ? chargesResponse.flat() as Charge[]
+    : [];
+
+  const payouts = Array.isArray(payoutsResponse) && !('message' in payoutsResponse)
+    ? payoutsResponse.flat() as Payout[]
+    : [];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

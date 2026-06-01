@@ -1,8 +1,6 @@
 'use server';
 
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaNeon } from "@prisma/adapter-neon";
 
@@ -36,7 +34,7 @@ export async function createCharge(formData: FormData) {
       message: 'Missing Fields.',
     };
   }
-  
+
   const { buyer_id, seller_id, amount } = validatedFields.data;
 
   try {
@@ -61,7 +59,7 @@ export async function createCharge(formData: FormData) {
   }
 }
 
-export async function addMPId(charge_id: string, mp_payment_id: string  ){
+export async function addMPId(charge_id: string, mp_payment_id: string) {
   try {
     const charge = await prisma.charges.update({
       where: {
@@ -80,112 +78,112 @@ export async function addMPId(charge_id: string, mp_payment_id: string  ){
   }
 }
 
-export async function searchCharges(buyer_id: string){
-    try {
-      const charges = await prisma.charges.findMany({
-        where: {
-          buyer_id: buyer_id
-        },
-        orderBy: {
-          created_at: 'desc'
-        },
-        take: 9
-      });
-      const formattedCharges = charges.map((charge) => ({
-        ...charge,
-        amount: charge.amount?.toString()
-      }));
-      return [formattedCharges];
-    } catch (error) { 
-      console.error(error)
-      return{  
-        message: 'Database Error'
-      }
+export async function searchCharges(buyer_id: string) {
+  try {
+    const charges = await prisma.charges.findMany({
+      where: {
+        buyer_id: buyer_id
+      },
+      orderBy: {
+        created_at: 'desc'
+      },
+      take: 9
+    });
+    const formattedCharges = charges.map((charge) => ({
+      ...charge,
+      amount: charge.amount?.toString()
+    }));
+    return [formattedCharges];
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
     }
+  }
 }
 
-export async function searchAllChargesByUser(buyer_id: string){
-    try {
-      const charges = await prisma.charges.findMany({
-        where: {
-          buyer_id: buyer_id
-        },
-        orderBy: {
-          created_at: 'desc'
-        }
-      });
-      const formattedCharges = charges.map((charge) => ({
-        ...charge,
-        amount: charge.amount?.toString()
-      }));
-      return [formattedCharges];
-    } catch (error) { 
-      console.error(error)
-      return{  
-        message: 'Database Error'
+export async function searchAllChargesByUser(buyer_id: string) {
+  try {
+    const charges = await prisma.charges.findMany({
+      where: {
+        buyer_id: buyer_id
+      },
+      orderBy: {
+        created_at: 'desc'
       }
+    });
+    const formattedCharges = charges.map((charge) => ({
+      ...charge,
+      amount: charge.amount?.toString()
+    }));
+    return [formattedCharges];
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
     }
+  }
 }
 
-export async function searchAllCharges(){
-    try {
-      const charges = await prisma.charges.findMany({
-        where: {
-          
-        }
-        });
-      return charges ? [charges] : [];
-    } catch (error) { 
-      console.error(error)
-      return{  
-        message: 'Database Error'
+export async function searchAllCharges() {
+  try {
+    const charges = await prisma.charges.findMany({
+      where: {
+
       }
+    });
+    return charges ? [charges] : [];
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
     }
+  }
 }
 
-export async function updateCharge(charge_id: string){
-    try {
-      const charges = await prisma.charges.update({
-        where: {
-          id: charge_id
-        },
-        data: {
-          status: 'approved'
-        }
-        });
-      return charges ? [charges] : [];
-    } catch (error) { 
-      console.error(error)
-      return{  
-        message: 'Database Error'
+export async function updateCharge(charge_id: string) {
+  try {
+    const charges = await prisma.charges.update({
+      where: {
+        id: charge_id
+      },
+      data: {
+        status: 'approved'
       }
+    });
+    return charges ? [charges] : [];
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
     }
+  }
 }
 
-export async function rejectCharge(charge_id: string){
-    try {
-      const charges = await prisma.charges.update({
-        where: {
-          id: charge_id
-        },
-        data: {
-          status: 'rejected'
-        }
-        });
-      return charges ? [charges] : [];
-    } catch (error) { 
-      console.error(error)
-      return{  
-        message: 'Database Error'
+export async function rejectCharge(charge_id: string) {
+  try {
+    const charges = await prisma.charges.update({
+      where: {
+        id: charge_id
+      },
+      data: {
+        status: 'rejected'
       }
+    });
+    return charges ? [charges] : [];
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
     }
+  }
 }
 
-export async function createPayout(buyer_id:string,amount:number,seller_id:string,charge_id:string){
+export async function createPayout(buyer_id: string, amount: number, seller_id: string, charge_id: string) {
   try {
     const payout = await prisma.payouts.create({
       data: {
-        seller_id: seller_id ,
+        seller_id: seller_id,
         amount: amount,
         status: 'pending',
         charge_id: charge_id
@@ -205,7 +203,7 @@ export async function createPayout(buyer_id:string,amount:number,seller_id:strin
 }
 
 
-export async function acceptPayout(charge_id:string){
+export async function acceptPayout(charge_id: string) {
   try {
     const existingPayout = await prisma.payouts.findFirst({
       where: {
@@ -223,16 +221,16 @@ export async function acceptPayout(charge_id:string){
       }
     });
     return [payout];
-  } catch (error) { 
+  } catch (error) {
     console.error(error)
-    return{
+    return {
       message: 'Database Error'
     }
   }
 }
 
 
-export async function rejectPayout(charge_id:string){
+export async function rejectPayout(charge_id: string) {
   try {
     const existingPayout = await prisma.payouts.findFirst({
       where: {
@@ -250,15 +248,15 @@ export async function rejectPayout(charge_id:string){
       }
     });
     return [payout];
-  } catch (error) { 
+  } catch (error) {
     console.error(error)
-    return{
+    return {
       message: 'Database Error'
     }
   }
 }
 
-export async function searchPayout(charge_id:string){
+export async function searchPayout(charge_id: string) {
   try {
     const payout = await prisma.payouts.findFirst({
       where: {
@@ -268,13 +266,13 @@ export async function searchPayout(charge_id:string){
     return payout ? [payout] : [];
   } catch (error) {
     console.error(error)
-    return{
+    return {
       message: 'Database Error'
     }
   }
 }
 
-export async function searchAllPayoutsByUser(seller_id: string){
+export async function searchAllPayoutsByUser(seller_id: string) {
   try {
     const payouts = await prisma.payouts.findMany({
       where: {
@@ -291,13 +289,13 @@ export async function searchAllPayoutsByUser(seller_id: string){
     return [formattedPayouts];
   } catch (error) {
     console.error(error)
-    return{
+    return {
       message: 'Database Error'
     }
   }
 }
 
-export async function searchPayoutsByUser(seller_id: string){
+export async function searchPayoutsByUser(seller_id: string) {
   try {
     const payouts = await prisma.payouts.findMany({
       where: {
@@ -315,13 +313,13 @@ export async function searchPayoutsByUser(seller_id: string){
     return [formattedPayouts];
   } catch (error) {
     console.error(error)
-    return{
+    return {
       message: 'Database Error'
     }
   }
 }
 
-export async function getAmount(charge_id:string){
+export async function getAmount(charge_id: string) {
   try {
     const payout = await prisma.payouts.findFirst({
       where: {
@@ -334,20 +332,18 @@ export async function getAmount(charge_id:string){
     return payout ? payout.amount : 0;
   } catch (error) {
     console.error(error)
-    return{
+    return {
       message: 'Database Error'
     }
   }
 }
 
-export async function createBalance(payout_id: string, charge_id:string, amount : number,seller_id:string) {
-  const buyer_id = await getBuyerId(charge_id)
-
+export async function createBalance(payout_id: string, charge_id: string, amount: number, seller_id: string) {
   const previous_balance = await getPreviousBalance(seller_id!.toString())
   try {
     const balance = await prisma.balance_logs.create({
       data: {
-        user_id:seller_id ,
+        user_id: seller_id,
         amount_change: amount,
         previous_balance: previous_balance,
         new_balance: Number(previous_balance) + (amount),
@@ -358,9 +354,6 @@ export async function createBalance(payout_id: string, charge_id:string, amount 
         id: true,
       },
     });
-    console.log("balance amount:", previous_balance)
-    console.log("amount:", amount.toPrecision(2));
-    console.log("new balance:", Number(previous_balance) + (amount));
     return balance.id;
   } catch (error) {
     console.error(error);
@@ -368,12 +361,12 @@ export async function createBalance(payout_id: string, charge_id:string, amount 
       message: 'Database Error: Failed to Create Charge.',
     };
   }
-  
+
 }
 
-export async function getPreviousBalance(buyer_id:string){
+export async function getPreviousBalance(buyer_id: string) {
   try {
-    
+
     const payout = await prisma.users.findUnique({
       where: {
         clerk_id: buyer_id
@@ -390,7 +383,7 @@ export async function getPreviousBalance(buyer_id:string){
   }
 }
 
-export async function getBuyerId(buyer_id:string){
+export async function getBuyerId(buyer_id: string) {
   try {
     const payout = await prisma.charges.findUnique({
       where: {
@@ -409,7 +402,7 @@ export async function getBuyerId(buyer_id:string){
 
 }
 
-export async function addBalance(seller_id:string, amount:number){
+export async function addBalance(seller_id: string, amount: number) {
   try {
     const user = await prisma.users.findUnique({
       where: {
@@ -437,21 +430,21 @@ export async function addBalance(seller_id:string, amount:number){
   }
 }
 
-export async function createUser(clerk_id: string){
-  try {
-    const user = await prisma.users.create({
-      data: {
-        clerk_id: clerk_id,
-        balance: 0,
-      },
-      select: {
-        clerk_id: true,
-      },
-    });
-    return user.clerk_id;
-  } catch (error) {
-    console.error(error);
-    return console.error('Database Error: Failed to Create User.');
-  }
 
+export async function syncUser(clerk_id: string) {
+  try {
+    const user = await prisma.users.findUnique({
+      where: { clerk_id }
+    });
+    if (!user) {
+      await prisma.users.create({
+        data: {
+          clerk_id: clerk_id,
+          balance: 0,
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Database Error: Failed to Sync User.', error);
+  }
 }

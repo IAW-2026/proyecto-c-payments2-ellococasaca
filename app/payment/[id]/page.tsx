@@ -1,22 +1,18 @@
 'use client'
 
 import React from 'react';
-import Script from 'next/script'
-import  App  from './app.js';
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
-
-// Inicializa Mercado Pago con tu Public Key
-
 
 export default function PaymentPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+
   const resolvedParams = React.use(params);
+
   initMercadoPago('APP_USR-9f19cfb8-e586-4450-beb9-779bb8563d86');
   return (
-    
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-blue-900/5 flex flex-col items-center justify-center text-center">
         

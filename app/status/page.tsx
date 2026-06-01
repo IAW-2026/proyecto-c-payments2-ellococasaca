@@ -21,7 +21,7 @@ export default async function StatusPage() {
   if (!userId) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8 text-center text-gray-500">
-        <div className="text-xl font-bold uppercase tracking-widest text-gray-500">Please sign in to view your forms.</div>
+        <div className="text-xl font-bold uppercase tracking-widest text-gray-500">Por favor, inicie sesión para ver su estado.</div>
       </div>
     );
   }
@@ -55,14 +55,14 @@ export default async function StatusPage() {
               href="/status/charges"
               className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 text-sm"
             >
-              View All Charges
+              Ver todas las compras
             </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {charges.length === 0 ? (
               <div className="col-span-full text-center text-gray-500 font-bold uppercase tracking-widest py-8">
-                No purchases found.
+                No se encontraron compras.
               </div>
             ) : charges.map((charge, index) => (
               <div 
@@ -78,7 +78,7 @@ export default async function StatusPage() {
                 
                 <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-5 flex-grow">
                   <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">ID</span><span className="text-sm font-bold text-gray-900 truncate" title={charge.id}>{charge.id}</span></div>
-                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Amount</span><span className="text-xl text-blue-600 font-black tracking-tighter italic truncate">${charge.amount?.toString() || '0.00'}</span></div>
+                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Monto</span><span className="text-xl text-blue-600 font-black tracking-tighter italic truncate">${charge.amount?.toString() || '0.00'}</span></div>
                 </div>
               </div>
             ))}
@@ -97,14 +97,14 @@ export default async function StatusPage() {
               href="/status/payouts"
               className="px-6 py-3 bg-green-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20 text-sm"
             >
-              View All Payouts
+              Ver todas las ventas
             </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {payouts.length === 0 ? (
               <div className="col-span-full text-center text-gray-500 font-bold uppercase tracking-widest py-8">
-                No sales found.
+                No se encontraron ventas.
               </div>
             ) : payouts.map((payout, index) => (
               <div 
@@ -120,8 +120,8 @@ export default async function StatusPage() {
                 
                 <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-5 flex-grow">
                   <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">ID</span><span className="text-sm font-bold text-gray-900 truncate" title={payout.id}>{payout.id}</span></div>
-                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Charge ID</span><span className="text-sm font-bold text-gray-900 truncate" title={payout.charge_id || ''}>{payout.charge_id || 'N/A'}</span></div>
-                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Amount</span><span className="text-xl text-green-600 font-black tracking-tighter italic truncate">${payout.amount?.toString() || '0.00'}</span></div>
+                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">ID Compra</span><span className="text-sm font-bold text-gray-900 truncate" title={payout.charge_id || ''}>{payout.charge_id || 'N/A'}</span></div>
+                  <div className="flex flex-col"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-1">Monto</span><span className="text-xl text-green-600 font-black tracking-tighter italic truncate">${payout.amount?.toString() || '0.00'}</span></div>
                 </div>
               </div>
             ))}

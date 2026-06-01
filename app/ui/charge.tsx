@@ -16,16 +16,16 @@ export default async function DataViewer() {
   return (
     <div className="p-4 space-y-8">
       <div>
-        <h2 className="text-xl font-bold mb-4">Charges</h2>
+        <h2 className="text-xl font-bold mb-4">Cargo</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border text-left text-sm text-gray-900">
             <thead className="bg-gray-100 font-medium">
               <tr>
                 <th className="py-2 px-4 border">ID</th>
-                <th className="py-2 px-4 border">Order ID</th>
-                <th className="py-2 px-4 border">Buyer ID</th>
-                <th className="py-2 px-4 border">Amount</th>
-                <th className="py-2 px-4 border">Status</th>
+                <th className="py-2 px-4 border">ID Compra</th>
+                <th className="py-2 px-4 border">ID Vendedor</th>
+                <th className="py-2 px-4 border">Monto</th>
+                <th className="py-2 px-4 border">Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -39,7 +39,7 @@ export default async function DataViewer() {
               ))}
               {charges.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-2 px-4 border text-center text-gray-500">No charges found</td>
+                  <td colSpan={5} className="py-2 px-4 border text-center text-gray-500">No se encontraron movimientos.</td>
                 </tr>
               )}
             </tbody>

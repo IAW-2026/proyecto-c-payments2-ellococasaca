@@ -10,14 +10,12 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
-    // Datos enviados por la otra app
     const {
       buyer_id,
       seller_id,
       amount,
     } = body
 
-    // Validaciones básicas
     if (!amount) {
       return NextResponse.json(
         { error: 'Missing data' },
@@ -25,7 +23,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    //guardar pago en DB
     const data = new FormData()
     if (buyer_id) data.append('buyer_id', buyer_id)
     data.append('seller_id', seller_id)
@@ -44,7 +41,6 @@ export async function POST(req: NextRequest) {
 
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_token! });
 
-    // 3. Estructuramos el payload (los datos) que exige MercadoPago
     const preferenceData = {
       body: {
         items: [
@@ -69,7 +65,7 @@ export async function POST(req: NextRequest) {
         auto_return: "approved", // Redirige automáticamente si es exitoso
 
         // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-        notification_url: "https://maroon-dawdler-tug.ngrok-free.dev/api/notification",
+        notification_url: "https://proyecto-c-payments2-ellococasaca.vercel.app/api/notification",
       }
     };
     // 4. Enviamos los datos a MercadoPago para crear el intento de pago
@@ -82,7 +78,6 @@ export async function POST(req: NextRequest) {
       init_point: result.init_point // URL para redirigir al usuario
     });*/
 
-    console.log(result.id)
     url = result.id!
 
 

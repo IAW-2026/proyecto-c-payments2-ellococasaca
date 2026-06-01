@@ -23,7 +23,7 @@ export default function TestPage() {
         },
         body: JSON.stringify({
           buyer_id: user.id,
-          seller_id:'user_3EHh...',
+          seller_id:'user_3EX8JkpOxv0HnTGOhIZfF3vCX2r',
           amount: parseFloat(amount)
         }),
       });
@@ -53,7 +53,7 @@ export default function TestPage() {
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       
       <form onSubmit={handleSubmit} className="bg-gray-100 p-8 rounded-lg shadow-lg w-full max-w-md flex flex-col gap-4">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Payment Details</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Detalles de pagos</h2>
         
         <div className="flex flex-col gap-2">
           <label htmlFor="item" className="text-sm font-medium text-gray-700">Item</label>
@@ -70,7 +70,7 @@ export default function TestPage() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="amount" className="text-sm font-medium text-gray-700">Amount</label>
+          <label htmlFor="amount" className="text-sm font-medium text-gray-700">Monto</label>
           <input 
             type="number" 
             id="amount" 

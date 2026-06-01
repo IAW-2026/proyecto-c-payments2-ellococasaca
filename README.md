@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Acerca del proyecto
 
-## Getting Started
+Este es el payment de el loco casaca.
+Si bien muchas de sus interacciones se haran mediante llamadas desde otras aplicaciones, esta instancia posee la pagina /test que permite crear compras de prueba y /status para ver las mismas.
 
-First, run the development server:
+## Links
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+El link al deploy de vercel es el siguiente: https://proyecto-c-payments2-ellococasaca.vercel.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Datos de prueba
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Se cuenta con dos cuentas de clerck para testear:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Usuario 1
 
-## Learn More
+    User: paymenttest1
+    Password: paymenttest1
 
-To learn more about Next.js, take a look at the following resources:
+# Usuario 2
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    User: paymenttest2
+    Password: paymenttest2
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Usuario 1 funciona como comprador y usuario 2 como vendedor, ambos poseen las mismas caracteristicas y mismo rol dentro del sistema
 
-## Deploy on Vercel
+## Problemas conocidos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El proyecto cuenta con una variable de entorno dentro del codigo, esto es asi ya que las componentes de mercado pago no pueden ser inicializadas si se utiliza la key desde un archivo .env.
+En las recepciones de mercado pago se debe verificar que la recepcion del pago no fue alterada por algun atacante, en esta etapa no se hace esa verificacion debido a problemas en la verificacion.

@@ -42,7 +42,7 @@ export async function createCharge(formData: FormData) {
       data: {
         buyer_id: buyer_id,
         amount: amount,
-        status: 'pending',
+        status: 'pendiente',
         mp_payment_id: null,
       },
       select: {
@@ -148,7 +148,7 @@ export async function updateCharge(charge_id: string) {
         id: charge_id
       },
       data: {
-        status: 'approved'
+        status: 'aprobado'
       }
     });
     return charges ? [charges] : [];
@@ -167,7 +167,7 @@ export async function rejectCharge(charge_id: string) {
         id: charge_id
       },
       data: {
-        status: 'rejected'
+        status: 'rechazado'
       }
     });
     return charges ? [charges] : [];
@@ -185,7 +185,7 @@ export async function createPayout(buyer_id: string, amount: number, seller_id: 
       data: {
         seller_id: seller_id,
         amount: amount,
-        status: 'pending',
+        status: 'pendiente',
         charge_id: charge_id
       },
       select: {
@@ -244,7 +244,7 @@ export async function rejectPayout(charge_id: string) {
         id: existingPayout.id
       },
       data: {
-        status: 'rejected'
+        status: 'rechazado'
       }
     });
     return [payout];

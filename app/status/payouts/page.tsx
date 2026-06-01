@@ -27,13 +27,13 @@ export default async function PayoutsListPage() {
       <div className="max-w-4xl mx-auto space-y-8">
         
         <h1 className="text-4xl md:text-5xl text-gray-900 mb-8 text-center font-black uppercase italic tracking-tighter">
-          My Payouts
+          Mis ventas
         </h1>
         
         <div className="flex flex-col space-y-4">
           {payouts.length === 0 ? (
             <div className="text-center text-gray-500 font-bold uppercase tracking-widest py-8 bg-white rounded-2xl border border-gray-100 shadow-sm">
-              No payouts found.
+              No se encontraron ventas.
             </div>
           ) : payouts.map((payout, index) => (
             <div 

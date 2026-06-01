@@ -37,9 +37,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const payoutResult = await createPayout(buyer_id, amount, seller_id, chargeResult)
+    await createPayout(buyer_id, amount, seller_id, chargeResult)
 
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_token! });
+    console.log('MercadoPago client initialized with access token:', process.env.MP_token);
 
     const preferenceData = {
       body: {
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
       }
     };
     // 4. Enviamos los datos a MercadoPago para crear el intento de pago
+    console.log('Creating MercadoPago preference with data:', preferenceData);
     const preference = new Preference(client);
     const result = await preference.create(preferenceData);
 

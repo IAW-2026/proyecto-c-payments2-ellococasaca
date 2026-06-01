@@ -217,7 +217,7 @@ export async function acceptPayout(charge_id: string) {
         id: existingPayout.id
       },
       data: {
-        status: 'paid'
+        status: 'pagado'
       }
     });
     return [payout];

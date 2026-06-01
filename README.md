@@ -23,6 +23,10 @@ Se cuenta con dos cuentas de clerck para testear:
 
 Usuario 1 funciona como comprador y usuario 2 como vendedor, ambos poseen las mismas caracteristicas y mismo rol dentro del sistema
 
+ # Usuario Mercado Pago
+    User: TESTUSER5266286591592857141
+    Password: 2foqzk88t1
+
 ## Problemas conocidos
 
 El proyecto cuenta con una variable de entorno dentro del codigo, esto es asi ya que las componentes de mercado pago no pueden ser inicializadas si se utiliza la key desde un archivo .env.

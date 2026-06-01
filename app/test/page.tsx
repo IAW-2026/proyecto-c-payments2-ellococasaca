@@ -23,7 +23,7 @@ export default function TestPage() {
         },
         body: JSON.stringify({
           buyer_id: user.id,
-          seller_id:'user_3EX8JkpOxv0HnTGOhIZfF3vCX2r',
+          seller_id:'user_3EXCQQzlvNmKjw9ucIFSOLpKFAh',
           amount: parseFloat(amount)
         }),
       });
@@ -38,7 +38,6 @@ export default function TestPage() {
         window.location.href = data.url;
       } else {
         setStatus({ type: 'success', message: 'Successfully submitted!' });
-        console.log('Success:', data);
       }
     } catch (error) {
       console.error('Error submitting form:', error);

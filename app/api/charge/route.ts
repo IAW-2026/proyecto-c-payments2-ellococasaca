@@ -40,13 +40,12 @@ export async function POST(req: NextRequest) {
     await createPayout(buyer_id, amount, seller_id, chargeResult)
 
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
-    console.log('MercadoPago client initialized with access token:', process.env.MP_ACCESS_TOKEN);
 
     const preferenceData = {
       body: {
         items: [
           {
-            id: "",
+            id: "test",
             title: "Compra en El Loco Casaca",
             quantity: 1,
             unit_price: Number(amount),
@@ -70,7 +69,7 @@ export async function POST(req: NextRequest) {
       }
     };
     // 4. Enviamos los datos a MercadoPago para crear el intento de pago
-    console.log('Creating MercadoPago preference with data:', preferenceData);
+
     const preference = new Preference(client);
     const result = await preference.create(preferenceData);
 
@@ -91,7 +90,6 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     )
   }
-
   revalidatePath('/payment');
   return NextResponse.json({ url: `/payment/${url}` });
 }

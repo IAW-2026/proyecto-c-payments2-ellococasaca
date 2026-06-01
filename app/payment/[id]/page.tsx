@@ -12,8 +12,12 @@ export default function PaymentPage({
   const resolvedParams = React.use(params);
 
   console.log('Received params:', resolvedParams);
-  initMercadoPago('APP_USR-9f19cfb8-e586-4450-beb9-779bb8563d86');
-  console.log('MercadoPago SDK initialized');
+  const mpPublicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
+  if (mpPublicKey) {
+    initMercadoPago(mpPublicKey);
+  } else {
+    console.error('MercadoPago public key is not defined in environment variables.');
+  }
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-blue-900/5 flex flex-col items-center justify-center text-center">

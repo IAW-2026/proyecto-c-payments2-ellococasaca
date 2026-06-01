@@ -217,6 +217,9 @@ export async function POST(req: NextRequest) {
 
   const charge_id = payment.external_reference;
   const status = payment.status;
+  console.log("status: "+status)
+  console.log("charge_id: "+charge_id)
+  console.log("payment: "+JSON.stringify(payment))
 
   if (status === "approved") {  
     updateCharge(charge_id)
@@ -224,6 +227,12 @@ export async function POST(req: NextRequest) {
     createPayout(payment.buyer_id, payment.transaction_amount, payment.seller_id, charge_id);
   }else {
     rejectCharge(charge_id)
+    return NextResponse.json(
+      {
+        status: "ok",
+      },
+      { status: 200 }
+    );
   }
 
    try {

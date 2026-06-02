@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    await createPayout(buyer_id, amount, seller_id, chargeResult)
+    
 
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
 

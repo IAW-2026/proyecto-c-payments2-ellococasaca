@@ -11,7 +11,7 @@ export default function PaymentPage({
 
   const resolvedParams = React.use(params);
 
-  console.log('Received params:', resolvedParams);
+  
   const mpPublicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
   if (mpPublicKey) {
     initMercadoPago(mpPublicKey);

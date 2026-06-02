@@ -36,7 +36,19 @@ Usuario 1 funciona como comprador y usuario 2 como vendedor, ambos poseen las mi
     Luego en /test se puede generar una venta especificando un titulo y un monto, luego se direcciona a una pagina donde al apretar un boton de pago redirecciona a mercadopago para la venta.
     Las ventas realizadas solo se acreditaran una vez que shipment app de el ok y ahi se acreitaran si es aprobado o se rechazaran.
     Para aprobar una venta se debe usar un CURL:
-    (poner CURL)
+    curl -X POST http://localhost:3000/api/payout \
+        -H "Content-Type: application/json" \
+        -d '{
+            "charge_id": "your_charge_id_here",
+            "status": "rejected"
+         }'
+
+    curl -X POST http://localhost:3000/api/payout \
+        -H "Content-Type: application/json" \
+        -d '{
+            "charge_id": "your_charge_id_here",
+            "status": "approved"
+    }'
     luego se puede ver el pago aprobado o desaprobado en /status
 
 ## 4. Breve descripcion

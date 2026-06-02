@@ -13,9 +13,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Reuse your existing action that fetches the balance from Prisma using clerk_id
+
     const balance = await getPreviousBalance(clerk_id);
-    console.log(balance)
 
     return NextResponse.json({ balance }, { status: 200 });
   } catch (error) {

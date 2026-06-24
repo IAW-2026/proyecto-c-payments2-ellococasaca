@@ -14,6 +14,8 @@ export async function POST(req: NextRequest) {
       buyer_id,
       seller_id,
       amount,
+      products_id,
+      shipping_address,
     } = body
 
     if (!amount) {
@@ -22,13 +24,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-
-    const data = new FormData()
-    if (buyer_id) data.append('buyer_id', buyer_id)
-    data.append('seller_id', seller_id)
-    data.append('amount', amount.toString())
-
-    const chargeResult = await createCharge(data)
+    console.log("Received request body:", body);
+    const chargeResult = await createCharge({
+      buyer_id,
+      seller_id,
+      amount,
+      products_id,
+      shipping_address,
+    })
 
     if (typeof chargeResult !== 'string') {
       return NextResponse.json(
@@ -37,7 +40,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    await createPayout(buyer_id, amount, seller_id, chargeResult)
+    
 
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
 
@@ -58,9 +61,9 @@ export async function POST(req: NextRequest) {
 
         // URLs de retorno: A dónde vuelve el usuario tras pagar
         back_urls: {
-          success: "https://proyecto-c-payments2-ellococasaca.vercel.app/",
-          failure: "https://proyecto-c-payments2-ellococasaca.vercel.app/",
-          pending: "https://proyecto-c-payments2-ellococasaca.vercel.app/"
+          success: "https://proyecto-c-buyer-ellococasaca.vercel.app/",
+          failure: "https://proyecto-c-buyer-ellococasaca.vercel.app/",
+          pending: "https://proyecto-c-buyer-ellococasaca.vercel.app/"
         },
         auto_return: "approved", // Redirige automáticamente si es exitoso
 
@@ -93,3 +96,25 @@ export async function POST(req: NextRequest) {
   revalidatePath('/payment');
   return NextResponse.json({ url: `/payment/${url}` });
 }
+/*
+
+curl -X POST http://localhost:3000/api/shipping \
+  -H "Content-Type: application/json" \
+  -d '{
+    "buyerId": "user_3Fb3cO7cNjB7131LuBeBOgjJqnf",
+    "sellerId": "user_3EXCQQzlvNmKjw9ucIFSOLpKFAh",
+    "amount": 25000.50,
+    "productIds": [
+      "prod_1",
+      "prod_2"
+    ],
+    "shippingAddress": {
+      "street": "Av. San Martin 1234",
+      "city": "Bahía Blanca",
+      "province": "Buenos Aires",
+      "postalCode": "8000",
+      "country": "Argentina"
+    }
+  }'
+
+  */

@@ -1,42 +1,48 @@
 'use server';
 
 import { z } from 'zod';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaClient, Prisma } from '../generated/prisma/client';
 import { PrismaNeon } from "@prisma/adapter-neon";
 
 
 const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL })
 const prisma = new PrismaClient({ adapter })
 
+
 const FormSchema = z.object({
   buyer_id: z.string({
-    message: 'invalid order id',
+    message: 'invalid buyer id',
   }),
   seller_id: z.string({
-    message: 'invalid order id',
+    message: 'invalid seller id',
   }),
   amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
+  products_id: z.array(z.string()).optional(),
+  shipping_address: z.unknown().optional(),
 });
 
 
 const CreateCharge = FormSchema;
 
-export async function createCharge(formData: FormData) {
-  const validatedFields = CreateCharge.safeParse({
-    buyer_id: formData.get('buyer_id'),
-    seller_id: formData.get('seller_id'),
-    amount: formData.get('amount'),
-  });
+export async function createCharge(chargeData: {
+  buyer_id: string;
+  seller_id: string;
+  amount: number;
+  products_id?: string[];
+  shipping_address?: unknown;
+}) {
+  const validatedFields = CreateCharge.safeParse(chargeData);
 
   if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields.',
     };
   }
 
-  const { buyer_id, seller_id, amount } = validatedFields.data;
-
+  const { buyer_id, seller_id, amount, products_id, shipping_address } = validatedFields.data;
+  console.log("Creating charge with data:", chargeData);
   try {
     const charge = await prisma.charges.create({
       data: {
@@ -44,6 +50,8 @@ export async function createCharge(formData: FormData) {
         amount: amount,
         status: 'pendiente',
         mp_payment_id: null,
+        products_id: products_id,
+        shipping_address: shipping_address as Prisma.InputJsonValue,
       },
       select: {
         id: true,
@@ -56,6 +64,30 @@ export async function createCharge(formData: FormData) {
     return {
       message: 'Database Error: Failed to Create Charge.',
     };
+  }
+}
+
+export async function getCharge(charge_id: string) {
+  try {
+    const charge = await prisma.charges.findUnique({
+      where: {
+        id: charge_id,
+      },
+      select: {
+        id: true,
+        amount: true,
+        status: true,
+        created_at: true,
+        buyer_id: true,
+        mp_payment_id: true,
+        products_id: true,
+        shipping_address: true,
+      },
+    });
+    return charge;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 }
 

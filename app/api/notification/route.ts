@@ -25,12 +25,16 @@ interface MercadoPagoWebhookPayload {
  * @param products - The array of product objects, e.g., [{ productId: string, quantity: number }].
  * @returns An array of tuples, e.g., [[number, string]].
  */
-function transformProductEntries(products: { productId: string; quantity: number }[]): [string,number][] {
+function transformProductEntries(products: { productId: string; quantity: number }[]) {
   if (!Array.isArray(products)) {
-    // Return an empty array or handle error if products is not in the expected format
     return [];
   }
-  return products.map(p => [p.productId, p.quantity,]);
+  
+  // En lugar de devolver un arreglo [p.productId, p.quantity], devolvemos un objeto
+  return products.map(p => ({
+    productId: p.productId,
+    quantity: p.quantity
+  }));
 }
 
 /**
@@ -220,7 +224,7 @@ export async function POST(req: NextRequest) {
 
     // ------------------------------------------------------------
     // STEP 8: Idempotency protection
-    //
+    //b0b3109b-aabe-4e83-a6fc-a39f27c985db,1
     // Recommendation:
     // Use payload.id or a composite event key.
     // ------------------------------------------------------------
@@ -228,7 +232,7 @@ export async function POST(req: NextRequest) {
     const eventId = String(payload.id || dataId);
 
     if (processedEvents.has(eventId)) {
-      console.log("Duplicate webhook ignored", {
+      console.log("Duplicate b0b3109b-aabe-4e83-a6fc-a39f27c985db,1webhook ignored", {
         eventId,
       });
 

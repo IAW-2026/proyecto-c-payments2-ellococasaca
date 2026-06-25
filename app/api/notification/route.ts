@@ -1,5 +1,5 @@
 
-import { addMPId, createPayout, rejectCharge, updateCharge } from "@/app/lib/actions";
+import { addMPId, createPayout, getCharge, rejectCharge, updateCharge } from "@/app/lib/actions";
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -236,9 +236,15 @@ export async function POST(req: NextRequest) {
   }
 
    try {
+    //todo: reemplazar el mock y avisar el buyer
+    ///api/shipments
     let shipmentUrl = new URL("/mocks/shipment", req.url).toString();
     if (shipmentUrl.includes("localhost") && shipmentUrl.startsWith("https://")) {
       shipmentUrl = shipmentUrl.replace("https://", "http://");
+    }
+    const charge = await getCharge(charge_id);
+    if (!charge) {
+      console.error("Charge not found for shipment notification:", charge_id);
     }
     const shipmentResponse = await fetch(shipmentUrl, {
       method: "POST",
@@ -248,6 +254,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         charge_id,
         status,
+        products_id: charge?.products_id,
+        shipping_address: charge?.shipping_address,
       }),
     });
     if (!shipmentResponse.ok) {
@@ -282,5 +290,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
 

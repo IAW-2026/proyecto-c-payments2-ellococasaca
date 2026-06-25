@@ -19,17 +19,23 @@ model balance_logs {
   users            users?    @relation(fields: [user_id], references: [clerk_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
+
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model charges {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  buyer_id      String?   @db.VarChar(255)
-  amount        Decimal   @db.Decimal(15, 2)
-  status        String?   @db.VarChar(50)
-  mp_payment_id String?   @db.VarChar(255)
-  created_at    DateTime? @default(now()) @db.Timestamptz(6)
-  users         users?    @relation(fields: [buyer_id], references: [clerk_id], onDelete: NoAction, onUpdate: NoAction)
-  payouts       payouts[]
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  buyer_id         String?   @db.VarChar(255)
+  amount           Decimal   @db.Decimal(15, 2)
+  status           String?   @db.VarChar(50)
+  mp_payment_id    String?   @db.VarChar(255)
+  products_id      String[]
+  shipping_address Json?
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  users            users?    @relation(fields: [buyer_id], references: [clerk_id], onDelete: NoAction, onUpdate: NoAction)
+  payouts          payouts[]
 }
+
+
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model payouts {

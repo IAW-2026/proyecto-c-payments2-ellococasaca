@@ -1,7 +1,7 @@
 'use server'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createCharge, createPayout } from '../../lib/actions'
+import { createCharge, createPayout, syncUser } from '../../lib/actions'
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { revalidatePath } from 'next/cache'
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       buyer_id,
       seller_id,
       amount,
-      products_id,
+      products,
       shipping_address,
     } = body
 
@@ -25,13 +25,24 @@ export async function POST(req: NextRequest) {
       )
     }
     console.log("Received request body:", body);
+
+    await syncUser(seller_id);
+    await syncUser(buyer_id);
+
     const chargeResult = await createCharge({
       buyer_id,
       seller_id,
       amount,
-      products_id,
+      products,
       shipping_address,
     })
+    console.log("chargeResult:", chargeResult);
+     const payoutResult = await createPayout(
+      buyer_id,
+      amount,
+      seller_id,
+      chargeResult as string
+    );
 
     if (typeof chargeResult !== 'string') {
       return NextResponse.json(
@@ -39,8 +50,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-
-    
 
     const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
 
@@ -68,7 +77,7 @@ export async function POST(req: NextRequest) {
         auto_return: "approved", // Redirige automáticamente si es exitoso
 
         // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-        notification_url: "https://proyecto-c-payments2-ellococasaca.vercel.app/api/notification",
+        notification_url: "https://maroon-dawdler-tug.ngrok-free.dev/api/notification",
       }
     };
     // 4. Enviamos los datos a MercadoPago para crear el intento de pago

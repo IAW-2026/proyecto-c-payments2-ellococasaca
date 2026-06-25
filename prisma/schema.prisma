@@ -28,7 +28,7 @@ model charges {
   amount           Decimal   @db.Decimal(15, 2)
   status           String?   @db.VarChar(50)
   mp_payment_id    String?   @db.VarChar(255)
-  products_id      String[]
+  products         Json?
   shipping_address Json?
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
   users            users?    @relation(fields: [buyer_id], references: [clerk_id], onDelete: NoAction, onUpdate: NoAction)

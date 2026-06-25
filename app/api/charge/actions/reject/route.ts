@@ -3,10 +3,12 @@ import { rejectCharge, rejectPayout, searchPayout } from '@/app/lib/actions';
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
 ) {
-    const { id: charge_id } = params;
-
+    const body = await request.json();
+    const { charge_id } = body;
+    if (!charge_id) {
+        return NextResponse.json({ error: 'Charge ID is missing' }, { status: 400 });
+    }
     if (!charge_id) {
         return NextResponse.json({ error: 'Charge ID is missing' }, { status: 400 });
     }

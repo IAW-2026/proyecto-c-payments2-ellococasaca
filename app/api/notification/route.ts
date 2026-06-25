@@ -337,7 +337,7 @@ export async function POST(req: NextRequest) {
         items: transformedProducts,
       }),
     });
-    
+    console.log("Seller API response:", sellerResponse)
   } catch (error) {
     console.error("Error notifying seller API:", error);
   }

@@ -759,6 +759,7 @@ export type Balance_logsScalarFieldEnum = (typeof Balance_logsScalarFieldEnum)[k
 export const ChargesScalarFieldEnum = {
   id: 'id',
   buyer_id: 'buyer_id',
+  order_id: 'order_id',
   amount: 'amount',
   status: 'status',
   mp_payment_id: 'mp_payment_id',

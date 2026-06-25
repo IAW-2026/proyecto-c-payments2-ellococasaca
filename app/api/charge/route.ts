@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
     const {
       buyer_id,
       seller_id,
+      order_id,
       amount,
       products,
       shipping_address,
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
     const chargeResult = await createCharge({
       buyer_id,
       seller_id,
+      order_id,
       amount,
       products,
       shipping_address,
@@ -77,7 +79,7 @@ export async function POST(req: NextRequest) {
         auto_return: "approved", // Redirige automáticamente si es exitoso
 
         // Aquí le indicas a MercadoPago a dónde debe enviar el Webhook que vimos antes
-        notification_url: "https://maroon-dawdler-tug.ngrok-free.dev/api/notification",
+        notification_url: "https://proyecto-c-payments2-ellococasaca.vercel.app/api/notification",
       }
     };
     // 4. Enviamos los datos a MercadoPago para crear el intento de pago
@@ -96,15 +98,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error(error)
-
-    return NextResponse.json(
-      { error: 'Error interno' },
-      { status: 500 }
-    )
-  }
-  revalidatePath('/payment');
-  return NextResponse.json({ url: `/payment/${url}` });
-}
 /*
 
 curl -X POST http://localhost:3000/api/shipping \
@@ -127,3 +120,11 @@ curl -X POST http://localhost:3000/api/shipping \
   }'
 
   */
+    return NextResponse.json(
+      { error: 'Error interno' },
+      { status: 500 }
+    )
+  }
+  revalidatePath('/payment');
+  return NextResponse.json({ url: `/payment/${url}` });
+}

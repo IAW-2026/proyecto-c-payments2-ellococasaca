@@ -25,6 +25,7 @@ model balance_logs {
 model charges {
   id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   buyer_id         String?   @db.VarChar(255)
+  order_id         String?
   amount           Decimal   @db.Decimal(15, 2)
   status           String?   @db.VarChar(50)
   mp_payment_id    String?   @db.VarChar(255)

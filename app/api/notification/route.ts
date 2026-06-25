@@ -33,6 +33,36 @@ function transformProductEntries(products: { productId: string; quantity: number
   return products.map(p => [p.productId, p.quantity,]);
 }
 
+/**
+ * Formats a shipping address string into a structured object.
+ * @param address - The shipping address, which can be a pre-formatted object or a string.
+ * @returns A structured address object or null if the format is invalid.
+ */
+function formatShippingAddress(address: unknown): { street: string; city: string; province: string; postalCode: string; country: string; } | null {
+  if (typeof address === 'object' && address !== null && 'street' in address && 'city' in address) {
+    // It's already a structured object, just return it.
+    // You might want to add more validation here to ensure all properties exist.
+    return address as { street: string; city: string; province: string; postalCode: string; country: string; };
+  }
+
+  if (typeof address === 'string') {
+    const parts = address.split(',').map(part => part.trim());
+    if (parts.length < 5) {
+      console.error("Invalid shipping_address string format:", address);
+      return null;
+    }
+    return {
+      street: parts[0],
+      city: parts[1],
+      province: parts[2],
+      postalCode: parts[3],
+      country: parts[4],
+    };
+  }
+
+  console.error("shipping_address is not a recognizable format:", address);
+  return null;
+}
 
 const processedEvents = new Set<string>();
 
@@ -41,7 +71,7 @@ export async function POST(req: NextRequest) {
     // ------------------------------------------------------------
     // STEP 1: Validate required headers
     // ------------------------------------------------------------
-    /*
+
     const xSignature = req.headers.get("x-signature");
     const xRequestId = req.headers.get("x-request-id");
     
@@ -56,7 +86,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-*/
+
     // ------------------------------------------------------------
     // STEP 2: Parse x-signature header
     //
@@ -66,7 +96,7 @@ export async function POST(req: NextRequest) {
     // Expected format:
     // ts=1704908010,v1=abcdef123456...
     // ------------------------------------------------------------
-/*
+
     let ts: string | null = null;
     let receivedSignature: string | null = null;
 
@@ -99,14 +129,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-*/
+
     // ------------------------------------------------------------
     // STEP 3: Obtain query param data.id
     //
     // Official template:
     // id:[data.id_url];request-id:[x-request-id_header];ts:[ts_header];
     // ------------------------------------------------------------
-/*
+
     const dataId = (
       req.nextUrl.searchParams.get("data.id") || ""
     ).toLowerCase();
@@ -121,25 +151,25 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-*/
+
     // ------------------------------------------------------------
     // STEP 4: Build manifest EXACTLY as documented
     //
     // Official docs section:
     // "Validate notification origin"
     // ------------------------------------------------------------
-/*
+
     const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
-*/
+
     // ------------------------------------------------------------
     // STEP 5: Generate HMAC SHA256 signature
     // ------------------------------------------------------------
-/*
+
     const generatedSignature = crypto
       .createHmac("sha256", process.env.MERCADOPAGO_WEBHOOK_SECRET!)
       .update(manifest)
       .digest("hex");
-*/
+
     // ------------------------------------------------------------
     // STEP 6: Constant-time comparison ya comendao
     // ------------------------------------------------------------
@@ -162,15 +192,15 @@ export async function POST(req: NextRequest) {
         },
         { status: 401 }
       );
-    }*/
-
+    }
+*/
     // ------------------------------------------------------------
     // STEP 7: Capture RAW BODY before JSON parsing
     //
     // Official recommendation:
     // Signature validation must happen before parsing JSON.
     // ------------------------------------------------------------
-/*
+
     const rawBody = await req.text();
 
     let payload: MercadoPagoWebhookPayload;
@@ -187,14 +217,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-*/
+
     // ------------------------------------------------------------
     // STEP 8: Idempotency protection
     //
     // Recommendation:
     // Use payload.id or a composite event key.
     // ------------------------------------------------------------
-/*
+
     const eventId = String(payload.id || dataId);
 
     if (processedEvents.has(eventId)) {
@@ -211,11 +241,11 @@ export async function POST(req: NextRequest) {
     }
 
     processedEvents.add(eventId);
-*/
+
     // ------------------------------------------------------------
     // STEP 9: Process webhook event
     // ------------------------------------------------------------
-/*
+
     const paymentId = payload.data!.id;
 
     const response = await fetch(
@@ -235,14 +265,6 @@ export async function POST(req: NextRequest) {
   //console.log("status: "+status)
   //console.log("charge_id: "+charge_id)
   //console.log("payment: "+JSON.stringify(payment))
-*/ 
-  const status ="approved";
-  const charge_id = "0083bb4d-bdff-4a8e-ac29-7597fe7e7571";
-  const payment = {
-    id: 123456789,
-    status: "approved",
-    external_reference: charge_id,
-  };
   if (status === "approved") {  
     await updateCharge(charge_id)
     await addMPId(charge_id, payment.id.toString())
@@ -257,10 +279,6 @@ export async function POST(req: NextRequest) {
   }
 
    try {
-    //console.log(req)
-    //console.log(req.body)
-    //todo: reemplazar el mock y avisar el buyer
-    ///api/shipments
     let shipmentUrl = new URL("https://proyecto-c-shipping2-ellococasaca.vercel.app/api/shipments", req.url).toString();
     if (shipmentUrl.includes("localhost") && shipmentUrl.startsWith("https://")) {
       shipmentUrl = shipmentUrl.replace("https://", "http://");
@@ -278,31 +296,33 @@ export async function POST(req: NextRequest) {
       console.error("Seller ID is null for payout:", payout);
     }
 
-    console.log("charge: "+JSON.stringify(charge))
-    console.log("payout: "+JSON.stringify(payout))
 
-    const orderId = "order_xxx";
+    const productIdsArray = Array.isArray(charge?.products)
+      ? (charge.products as { productId: string }[]).map((product) => product.productId)
+      : [];
+
     const shipmentResponse = await fetch(shipmentUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        orderId : orderId,
+        orderId : charge?.order_id,
         chargeId: charge_id,
         buyerId: charge?.buyer_id,
         sellerId: payout?.seller_id,
-        productsIds: charge?.products,
-        shippingAddress: charge?.shipping_address,
+        productIds: productIdsArray,
+        shippingAddress: formatShippingAddress(charge?.shipping_address),
       }),
     });
     console.log("Shipment API response:", shipmentResponse);
     if (!shipmentResponse.ok) {
+      const errorData = await shipmentResponse.json().catch(() => null);
       console.error("Failed to notify shipment API:", shipmentResponse.statusText);
     }
 
     //-----------------------------
-    /*
+    
     const sellerUrl = new URL("https://proyecto-c-seller-ellococasaca.vercel.app/api/orders", req.url).toString();
     console.log("buyer_id: "+charge!.buyer_id)
     const transformedProducts = transformProductEntries(charge!.products as { productId: string; quantity: number }[]);
@@ -317,8 +337,7 @@ export async function POST(req: NextRequest) {
         items: transformedProducts,
       }),
     });
-    console.log(sellerResponse)
-    */
+    
   } catch (error) {
     console.error("Error notifying seller API:", error);
   }

@@ -16,6 +16,7 @@ const FormSchema = z.object({
   seller_id: z.string({
     message: 'invalid seller id',
   }),
+  order_id: z.string().optional(),
   amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
   products: z.array(z.object({
     productId: z.string(),
@@ -30,6 +31,7 @@ const CreateCharge = FormSchema;
 export async function createCharge(chargeData: {
   buyer_id: string;
   seller_id: string;
+  order_id?: string;
   amount: number;
   products?: { productId: string; quantity: number }[];
   shipping_address?: unknown;
@@ -44,12 +46,13 @@ export async function createCharge(chargeData: {
     };
   }
 
-  const { buyer_id, seller_id, amount, products, shipping_address } = validatedFields.data;
+  const { buyer_id, seller_id, order_id, amount, products, shipping_address } = validatedFields.data;
   console.log("Creating charge with data:", chargeData);
   try {
     const charge = await prisma.charges.create({
       data: {
         buyer_id: buyer_id,
+        order_id: order_id,
         amount: amount,
         status: 'pendiente',
         mp_payment_id: null,
@@ -80,6 +83,7 @@ export async function getCharge(charge_id: string) {
         id: true,
         amount: true,
         status: true,
+        order_id: true,
         created_at: true,
         buyer_id: true,
         mp_payment_id: true,

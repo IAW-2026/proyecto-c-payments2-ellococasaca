@@ -1,5 +1,5 @@
 
-import { addMPId, createPayout, getCharge, rejectCharge, updateCharge } from "@/app/lib/actions";
+import { addMPId, createPayout, getCharge, rejectCharge, searchPayout, updateCharge } from "@/app/lib/actions";
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,6 +20,20 @@ interface MercadoPagoWebhookPayload {
   };
 }
 
+/**
+ * Transforms an array of product objects into an array of [quantity, productId] tuples.
+ * @param products - The array of product objects, e.g., [{ productId: string, quantity: number }].
+ * @returns An array of tuples, e.g., [[number, string]].
+ */
+function transformProductEntries(products: { productId: string; quantity: number }[]): [string,number][] {
+  if (!Array.isArray(products)) {
+    // Return an empty array or handle error if products is not in the expected format
+    return [];
+  }
+  return products.map(p => [p.productId, p.quantity,]);
+}
+
+
 const processedEvents = new Set<string>();
 
 export async function POST(req: NextRequest) {
@@ -27,9 +41,10 @@ export async function POST(req: NextRequest) {
     // ------------------------------------------------------------
     // STEP 1: Validate required headers
     // ------------------------------------------------------------
-    
+    /*
     const xSignature = req.headers.get("x-signature");
     const xRequestId = req.headers.get("x-request-id");
+    
 
     if (!xSignature || !xRequestId) {
       console.error("Missing required Mercado Pago headers");
@@ -41,7 +56,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+*/
     // ------------------------------------------------------------
     // STEP 2: Parse x-signature header
     //
@@ -51,7 +66,7 @@ export async function POST(req: NextRequest) {
     // Expected format:
     // ts=1704908010,v1=abcdef123456...
     // ------------------------------------------------------------
-
+/*
     let ts: string | null = null;
     let receivedSignature: string | null = null;
 
@@ -84,14 +99,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+*/
     // ------------------------------------------------------------
     // STEP 3: Obtain query param data.id
     //
     // Official template:
     // id:[data.id_url];request-id:[x-request-id_header];ts:[ts_header];
     // ------------------------------------------------------------
-
+/*
     const dataId = (
       req.nextUrl.searchParams.get("data.id") || ""
     ).toLowerCase();
@@ -106,27 +121,27 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+*/
     // ------------------------------------------------------------
     // STEP 4: Build manifest EXACTLY as documented
     //
     // Official docs section:
     // "Validate notification origin"
     // ------------------------------------------------------------
-
+/*
     const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
-
+*/
     // ------------------------------------------------------------
     // STEP 5: Generate HMAC SHA256 signature
     // ------------------------------------------------------------
-
+/*
     const generatedSignature = crypto
       .createHmac("sha256", process.env.MERCADOPAGO_WEBHOOK_SECRET!)
       .update(manifest)
       .digest("hex");
-
+*/
     // ------------------------------------------------------------
-    // STEP 6: Constant-time comparison
+    // STEP 6: Constant-time comparison ya comendao
     // ------------------------------------------------------------
 /*
     const generatedBuffer = Buffer.from(generatedSignature, "utf8");
@@ -155,7 +170,7 @@ export async function POST(req: NextRequest) {
     // Official recommendation:
     // Signature validation must happen before parsing JSON.
     // ------------------------------------------------------------
-
+/*
     const rawBody = await req.text();
 
     let payload: MercadoPagoWebhookPayload;
@@ -172,14 +187,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+*/
     // ------------------------------------------------------------
     // STEP 8: Idempotency protection
     //
     // Recommendation:
     // Use payload.id or a composite event key.
     // ------------------------------------------------------------
-
+/*
     const eventId = String(payload.id || dataId);
 
     if (processedEvents.has(eventId)) {
@@ -196,11 +211,11 @@ export async function POST(req: NextRequest) {
     }
 
     processedEvents.add(eventId);
-
+*/
     // ------------------------------------------------------------
     // STEP 9: Process webhook event
     // ------------------------------------------------------------
-
+/*
     const paymentId = payload.data!.id;
 
     const response = await fetch(
@@ -217,16 +232,22 @@ export async function POST(req: NextRequest) {
 
   const charge_id = payment.external_reference;
   const status = payment.status;
-  console.log("status: "+status)
-  console.log("charge_id: "+charge_id)
-  console.log("payment: "+JSON.stringify(payment))
-
+  //console.log("status: "+status)
+  //console.log("charge_id: "+charge_id)
+  //console.log("payment: "+JSON.stringify(payment))
+*/ 
+  const status ="approved";
+  const charge_id = "0083bb4d-bdff-4a8e-ac29-7597fe7e7571";
+  const payment = {
+    id: 123456789,
+    status: "approved",
+    external_reference: charge_id,
+  };
   if (status === "approved") {  
-    updateCharge(charge_id)
-    addMPId(charge_id, payment.id.toString())
-    createPayout(payment.buyer_id, payment.transaction_amount, payment.seller_id, charge_id);
+    await updateCharge(charge_id)
+    await addMPId(charge_id, payment.id.toString())
   }else {
-    rejectCharge(charge_id)
+    await rejectCharge(charge_id)
     return NextResponse.json(
       {
         status: "ok",
@@ -236,9 +257,11 @@ export async function POST(req: NextRequest) {
   }
 
    try {
+    //console.log(req)
+    //console.log(req.body)
     //todo: reemplazar el mock y avisar el buyer
     ///api/shipments
-    let shipmentUrl = new URL("/mocks/shipment", req.url).toString();
+    let shipmentUrl = new URL("https://proyecto-c-shipping2-ellococasaca.vercel.app/api/shipments", req.url).toString();
     if (shipmentUrl.includes("localhost") && shipmentUrl.startsWith("https://")) {
       shipmentUrl = shipmentUrl.replace("https://", "http://");
     }
@@ -246,23 +269,58 @@ export async function POST(req: NextRequest) {
     if (!charge) {
       console.error("Charge not found for shipment notification:", charge_id);
     }
+    const payoutResult = await searchPayout(charge_id);
+    const payout = Array.isArray(payoutResult) ? payoutResult[0] : undefined;
+    if (!payout) {    
+      console.error("Payout not found for shipment notification:", charge_id, payoutResult);
+    }
+    if (!payout?.seller_id) {
+      console.error("Seller ID is null for payout:", payout);
+    }
+
+    console.log("charge: "+JSON.stringify(charge))
+    console.log("payout: "+JSON.stringify(payout))
+
+    const orderId = "order_xxx";
     const shipmentResponse = await fetch(shipmentUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        charge_id,
-        status,
-        products_id: charge?.products_id,
-        shipping_address: charge?.shipping_address,
+        orderId : orderId,
+        chargeId: charge_id,
+        buyerId: charge?.buyer_id,
+        sellerId: payout?.seller_id,
+        productsIds: charge?.products,
+        shippingAddress: charge?.shipping_address,
       }),
     });
+    console.log("Shipment API response:", shipmentResponse);
     if (!shipmentResponse.ok) {
       console.error("Failed to notify shipment API:", shipmentResponse.statusText);
     }
+
+    //-----------------------------
+    /*
+    const sellerUrl = new URL("https://proyecto-c-seller-ellococasaca.vercel.app/api/orders", req.url).toString();
+    console.log("buyer_id: "+charge!.buyer_id)
+    const transformedProducts = transformProductEntries(charge!.products as { productId: string; quantity: number }[]);
+    console.log("products: "+transformedProducts)
+    const sellerResponse = await fetch(sellerUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        buyerId: charge!.buyer_id,
+        items: transformedProducts,
+      }),
+    });
+    console.log(sellerResponse)
+    */
   } catch (error) {
-    console.error("Error notifying shipment API:", error);
+    console.error("Error notifying seller API:", error);
   }
 
     // ------------------------------------------------------------
@@ -290,4 +348,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-

@@ -93,7 +93,7 @@ export const ChargesScalarFieldEnum = {
   amount: 'amount',
   status: 'status',
   mp_payment_id: 'mp_payment_id',
-  products_id: 'products_id',
+  products: 'products',
   shipping_address: 'shipping_address',
   created_at: 'created_at'
 } as const

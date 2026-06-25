@@ -3,9 +3,9 @@ import { acceptPayout, addBalance, searchPayout } from '@/app/lib/actions';
 
 export async function POST(
     request: NextRequest,
-    context: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
-    const charge_id = context.params.id;
+    const { id: charge_id } = await context.params;
 
     if (!charge_id) {
         return NextResponse.json({ error: 'Charge ID is missing' }, { status: 400 });

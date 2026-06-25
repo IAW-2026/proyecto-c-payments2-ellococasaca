@@ -17,7 +17,10 @@ const FormSchema = z.object({
     message: 'invalid seller id',
   }),
   amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
-  products_id: z.array(z.string()).optional(),
+  products: z.array(z.object({
+    productId: z.string(),
+    quantity: z.number(),
+  })).optional(),
   shipping_address: z.unknown().optional(),
 });
 
@@ -28,7 +31,7 @@ export async function createCharge(chargeData: {
   buyer_id: string;
   seller_id: string;
   amount: number;
-  products_id?: string[];
+  products?: { productId: string; quantity: number }[];
   shipping_address?: unknown;
 }) {
   const validatedFields = CreateCharge.safeParse(chargeData);
@@ -41,7 +44,7 @@ export async function createCharge(chargeData: {
     };
   }
 
-  const { buyer_id, seller_id, amount, products_id, shipping_address } = validatedFields.data;
+  const { buyer_id, seller_id, amount, products, shipping_address } = validatedFields.data;
   console.log("Creating charge with data:", chargeData);
   try {
     const charge = await prisma.charges.create({
@@ -50,7 +53,7 @@ export async function createCharge(chargeData: {
         amount: amount,
         status: 'pendiente',
         mp_payment_id: null,
-        products_id: products_id,
+        products: products as Prisma.InputJsonValue,
         shipping_address: shipping_address as Prisma.InputJsonValue,
       },
       select: {
@@ -80,7 +83,7 @@ export async function getCharge(charge_id: string) {
         created_at: true,
         buyer_id: true,
         mp_payment_id: true,
-        products_id: true,
+        products: true,
         shipping_address: true,
       },
     });
@@ -101,7 +104,7 @@ export async function addMPId(charge_id: string, mp_payment_id: string) {
         mp_payment_id: mp_payment_id
       }
     });
-    return charge ? [charge] : [];
+    return charge;
   } catch (error) {
     console.error(error);
     return {
@@ -175,7 +178,7 @@ export async function searchAllCharges() {
 
 export async function updateCharge(charge_id: string) {
   try {
-    const charges = await prisma.charges.update({
+    const charge = await prisma.charges.update({
       where: {
         id: charge_id
       },
@@ -183,7 +186,26 @@ export async function updateCharge(charge_id: string) {
         status: 'aprobado'
       }
     });
-    return charges ? [charges] : [];
+    return charge;
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function pendCharge(charge_id: string) {
+  try {
+    const charge = await prisma.charges.update({
+      where: {
+        id: charge_id
+      },
+      data: {
+        status: 'pendiente'
+      }
+    });
+    return charge;
   } catch (error) {
     console.error(error)
     return {
@@ -261,6 +283,32 @@ export async function acceptPayout(charge_id: string) {
   }
 }
 
+export async function pendPayout(charge_id: string) {
+  try {
+    const existingPayout = await prisma.payouts.findFirst({
+      where: {
+        charge_id: charge_id
+      }
+    });
+    if (!existingPayout) return [];
+
+    const payout = await prisma.payouts.update({
+      where: {
+        id: existingPayout.id
+      },
+      data: {
+        status: 'pendiente'
+      }
+    });
+    return [payout];
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
+    }
+  }
+}
+
 
 export async function rejectPayout(charge_id: string) {
   try {
@@ -287,6 +335,7 @@ export async function rejectPayout(charge_id: string) {
     }
   }
 }
+
 
 export async function searchPayout(charge_id: string) {
   try {

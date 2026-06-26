@@ -171,7 +171,23 @@ export async function searchAllCharges() {
 
       }
     });
-    return charges ? [charges] : [];
+    return charges;
+  } catch (error) {
+    console.error(error)
+    return {
+      message: 'Database Error'
+    }
+  }
+}
+
+export async function searchAllPayouts() {
+  try {
+    const payouts = await prisma.payouts.findMany({
+      where: {
+
+      }
+    });
+    return payouts;
   } catch (error) {
     console.error(error)
     return {

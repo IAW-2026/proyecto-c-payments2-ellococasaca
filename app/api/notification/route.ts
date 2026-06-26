@@ -337,6 +337,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        orderId: charge!.order_id,
         buyerId: charge!.buyer_id,
         items: transformedProducts,
       }),

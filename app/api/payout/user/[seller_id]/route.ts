@@ -7,6 +7,16 @@ export async function GET(
     request: NextRequest, // 1er parámetro: La petición
     context: { params: Promise<{ seller_id: string }> } // 2do parámetro: El contexto con los params asíncronos
 ) {
+const secret = process.env.INTER_SERVICE_SECRET;
+  const secretHeader = request.headers.get('x-inter-service-secret');
+
+  if(!secretHeader || secretHeader !== secret) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    )
+  }
+
     // Await obligatorio para los parámetros en Next.js 15+
     const { seller_id } = await context.params;
 

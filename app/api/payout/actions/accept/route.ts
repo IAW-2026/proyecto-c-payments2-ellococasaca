@@ -6,6 +6,17 @@ export async function POST(
 ) {
     const body = await request.json();
     const { charge_id } = body;
+
+const secret = process.env.INTER_SERVICE_SECRET;
+  const secretHeader = request.headers.get('x-inter-service-secret');
+
+  if(!secretHeader || secretHeader !== secret) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    )
+  }
+
     if (!charge_id) {
         return NextResponse.json({ error: 'Charge ID is missing' }, { status: 400 });
     }

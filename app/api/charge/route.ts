@@ -6,6 +6,17 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { revalidatePath } from 'next/cache'
 
 export async function POST(req: NextRequest) {
+
+  const secret = process.env.INTER_SERVICE_SECRET;
+  const secretHeader = req.headers.get('x-inter-service-secret');
+
+  if(!secretHeader || secretHeader !== secret) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    )
+  }
+
   let url = ""
   try {
     const body = await req.json()

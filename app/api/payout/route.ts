@@ -8,6 +8,17 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
+    const secret = process.env.INTER_SERVICE_SECRET;
+  const secretHeader = req.headers.get('x-inter-service-secret');
+
+  if(!secretHeader || secretHeader !== secret) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    )
+  }
+
+
     // Datos enviados por la otra app
     const {
       charge_id,

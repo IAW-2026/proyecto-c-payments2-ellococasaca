@@ -309,6 +309,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-inter-service-secret": process.env.INTER_SERVICE_SECRET || "",
       },
       body: JSON.stringify({
         orderId : charge?.order_id,
@@ -335,6 +336,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-inter-service-secret": process.env.INTER_SERVICE_SECRET || "",
       },
       body: JSON.stringify({
         orderId: charge!.order_id,
